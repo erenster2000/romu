@@ -1,4 +1,4 @@
-import { defineConfig } from "romu/config";
+import { defineConfig } from "romujs/config";
 
 export default defineConfig({
   store: {

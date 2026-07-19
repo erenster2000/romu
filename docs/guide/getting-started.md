@@ -47,7 +47,7 @@ import bgUrl from "../assets/images/bg.png"; // becomes an inlined WebP data URI
 `romu.config.ts` holds your store links and target networks:
 
 ```ts
-import { defineConfig } from "romu/config";
+import { defineConfig } from "romujs/config";
 
 export default defineConfig({
   store: {

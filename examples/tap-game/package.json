@@ -13,7 +13,7 @@
     "pixi.js": "^8.6.0"
   },
   "devDependencies": {
-    "romu": "workspace:*",
+    "romujs": "workspace:*",
     "typescript": "^5.9.0"
   }
 }

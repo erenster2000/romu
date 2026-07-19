@@ -57,7 +57,7 @@ limits, forbidden APIs, packaging rules. See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 | Package | What it is |
 |---|---|
-| `romu` | The CLI: `romu dev`, `romu build`, `romu check` |
+| `romujs` | The CLI: `romu dev`, `romu build`, `romu check` |
 | `create-romu` | Project scaffolding — `npm create romu` |
 | `@romujs/sdk` | The unified SDK game code imports |
 | `@romujs/core` | Build pipeline, dev server, asset pipeline, adapter runner |

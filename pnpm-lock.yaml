@@ -45,7 +45,7 @@ importers:
         specifier: ^8.6.0
         version: 8.19.0
     devDependencies:
-      romu:
+      romujs:
         specifier: workspace:*
         version: link:../../packages/cli
       typescript:

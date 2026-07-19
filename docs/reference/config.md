@@ -4,7 +4,7 @@ The config lives at the project root and is validated with zod — mistakes fail
 fast with readable errors before the build starts.
 
 ```ts
-import { defineConfig } from "romu/config";
+import { defineConfig } from "romujs/config";
 
 export default defineConfig({
   store: {

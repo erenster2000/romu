@@ -1,7 +1,7 @@
 /**
- * `romu/config` — what user projects import in romu.config.ts:
+ * `romujs/config` — what user projects import in romu.config.ts:
  *
- *   import { defineConfig } from "romu/config";
+ *   import { defineConfig } from "romujs/config";
  */
 
 export type { RomuConfig } from "@romujs/core";
