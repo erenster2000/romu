@@ -1,5 +1,25 @@
 # @romujs/adapter-meta
 
+## 0.2.0
+
+### Minor Changes
+
+- 7e79c57: `romu dev` grows two features. **Emulated network environments**: a floating
+  picker (or `?network=<id>` / `--network`) runs the adapter's real production
+  bridge against a mock ad container — fake `mraid`/`dapi`/`FbPlayableAd` with
+  realistic readiness and viewability timing — so container-protocol bugs
+  surface in dev instead of network review. Adapters can ship such a mock via
+  the new optional `devMock()` contract member. **On-device testing**: the dev
+  server now listens on the LAN and prints a QR code in the terminal; scan it
+  with a phone on the same Wi-Fi, hot reload included.
+
+### Patch Changes
+
+- Updated dependencies [7e79c57]
+- Updated dependencies [d937129]
+- Updated dependencies [926566f]
+  - @romujs/core@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

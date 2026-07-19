@@ -1,5 +1,35 @@
 # @romujs/core
 
+## 0.2.0
+
+### Minor Changes
+
+- 7e79c57: `romu dev` grows two features. **Emulated network environments**: a floating
+  picker (or `?network=<id>` / `--network`) runs the adapter's real production
+  bridge against a mock ad container — fake `mraid`/`dapi`/`FbPlayableAd` with
+  realistic readiness and viewability timing — so container-protocol bugs
+  surface in dev instead of network review. Adapters can ship such a mock via
+  the new optional `devMock()` contract member. **On-device testing**: the dev
+  server now listens on the LAN and prints a QR code in the terminal; scan it
+  with a phone on the same Wi-Fi, hot reload included.
+- d937129: The dev toolbar grows into a collapsible overlay panel (corner badge → panel;
+  `Ctrl+.` hides it, `--no-overlay` disables it): environment picker, a volume
+  slider and an ad-visibility toggle that fake real container events, and a
+  size HUD whose "measure" button runs the real build pipeline in memory and
+  renders each network's budget as a color-coded bar.
+
+  New SDK lifecycle members: `onVolumeChange(cb)` (container volume normalized
+  to 0..1, wired through MRAID's and dapi's `audioVolumeChange`) and
+  `onPause(cb)` / `onResume(cb)` (driven by the container's viewability —
+  freeze your game while hidden; networks reject playables that keep running).
+  The example game shows a mute badge at volume 0 and visibly freezes with a
+  "paused" indicator when the ad is hidden.
+
+- 926566f: Phone-framed preview: picking a device in the overlay panel opens
+  `/__romu/frame` — the game runs in a bezeled iframe at an exact viewport
+  (Android S 360×640 by default, phone M/L and tablet presets, rotate button
+  for landscape), and the panel keeps controlling the game inside the frame.
+
 ## 0.1.1
 
 ### Patch Changes
