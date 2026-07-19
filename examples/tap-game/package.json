@@ -9,6 +9,7 @@
     "check": "romu check"
   },
   "dependencies": {
+    "@romujs/pixi": "workspace:*",
     "@romujs/sdk": "workspace:*",
     "pixi.js": "^8.6.0"
   },

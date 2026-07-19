@@ -1,0 +1,43 @@
+{
+  "name": "@romujs/pixi",
+  "version": "0.0.0",
+  "description": "Romu's Pixi.js game layer: flow machine, scenes, playable components",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/pixi"
+  },
+  "homepage": "https://github.com/erenster2000/romu#readme",
+  "bugs": "https://github.com/erenster2000/romu/issues",
+  "keywords": [
+    "playable-ads",
+    "playable",
+    "html5-games",
+    "pixijs",
+    "game-framework"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@romujs/sdk": "workspace:*"
+  },
+  "peerDependencies": {
+    "pixi.js": "^8.0.0"
+  },
+  "devDependencies": {
+    "pixi.js": "^8.6.0"
+  }
+}

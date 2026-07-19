@@ -38,6 +38,9 @@ importers:
 
   examples/tap-game:
     dependencies:
+      '@romujs/pixi':
+        specifier: workspace:*
+        version: link:../../packages/pixi
       '@romujs/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
@@ -126,6 +129,16 @@ importers:
       picocolors:
         specifier: ^1.1.0
         version: 1.1.1
+
+  packages/pixi:
+    dependencies:
+      '@romujs/sdk':
+        specifier: workspace:*
+        version: link:../sdk
+    devDependencies:
+      pixi.js:
+        specifier: ^8.6.0
+        version: 8.19.0
 
   packages/sdk: {}
 
