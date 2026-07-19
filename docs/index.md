@@ -21,3 +21,5 @@ features:
   - title: Size-budgeted assets
     details: Images are re-encoded to WebP and inlined automatically, and every build prints who costs how many KB — engine included.
 ---
+
+<!-- deployed via GitHub Pages -->
