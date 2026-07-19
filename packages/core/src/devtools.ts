@@ -44,13 +44,34 @@ export function pickLanUrl(urls: string[]): string | undefined {
 }
 
 /**
- * The dev overlay: a tiny corner badge that expands into a panel with the
- * environment picker, chaos buttons (volume / viewability via
- * `window.__ROMU_ENV__`), and the size HUD (POST-free GET to
- * /__romu/measure). Collapsed state persists in localStorage; Ctrl+. hides
- * the overlay entirely. Never captures input outside its own box.
+ * Viewport presets for the phone-framed preview. Small Android first — the
+ * audience playables actually run for — so taşma bugs show up by default.
  */
-export function devPanel(networks: string[], selected: string): string {
+export const DEVICES: { id: string; label: string }[] = [
+  { id: "360x640", label: "Android S (360×640)" },
+  { id: "390x844", label: "Phone M (390×844)" },
+  { id: "430x932", label: "Phone L (430×932)" },
+  { id: "768x1024", label: "Tablet (768×1024)" },
+];
+
+export interface FrameState {
+  /** Preset id, e.g. "360x640". */
+  device: string;
+  landscape: boolean;
+}
+
+/**
+ * The dev overlay: a tiny corner badge that expands into a panel with the
+ * environment picker, the device-frame picker, chaos controls (volume /
+ * viewability via the environment hooks — reached inside the preview iframe
+ * when framed), and the size HUD. Collapsed state persists in localStorage;
+ * Ctrl+. hides the overlay entirely. Never captures input outside its box.
+ */
+export function devPanel(
+  networks: string[],
+  selected: string,
+  frame: FrameState | null = null,
+): string {
   const options = [SIMULATOR, ...networks];
   return `(function () {
   var LS = "romu-dev-overlay";
@@ -84,6 +105,22 @@ export function devPanel(networks: string[], selected: string): string {
       "background:#111;border:1px solid #333;border-radius:10px;padding:10px 12px;" +
       "min-width:310px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:none");
 
+    var FRAME = ${JSON.stringify(frame)};
+    var NETWORK = ${JSON.stringify(selected)};
+
+    function navigate(network, device, landscape) {
+      var url;
+      if (device === "none") {
+        url = new URL(location.origin + "/");
+      } else {
+        url = new URL(location.origin + "/__romu/frame");
+        url.searchParams.set("device", device);
+        if (landscape) url.searchParams.set("land", "1");
+      }
+      if (network !== ${JSON.stringify(SIMULATOR)}) url.searchParams.set("network", network);
+      location.href = url.toString();
+    }
+
     // environment row
     var envRow = row("env");
     var select = el("select",
@@ -92,21 +129,46 @@ export function devPanel(networks: string[], selected: string): string {
       var option = document.createElement("option");
       option.value = id;
       option.textContent = id;
-      if (id === ${JSON.stringify(selected)}) option.selected = true;
+      if (id === NETWORK) option.selected = true;
       select.appendChild(option);
     });
     select.onchange = function () {
-      var url = new URL(location.href);
-      if (select.value === ${JSON.stringify(SIMULATOR)}) url.searchParams.delete("network");
-      else url.searchParams.set("network", select.value);
-      location.href = url.toString();
+      navigate(select.value, FRAME ? FRAME.device : "none", FRAME ? FRAME.landscape : false);
     };
     envRow.appendChild(select);
     panel.appendChild(envRow);
 
-    // chaos rows — only when the current environment exposes hooks
-    var env = window.__ROMU_ENV__;
-    if (env && env.setVolume) {
+    // device-frame row
+    var devRow = row("device");
+    var devSelect = el("select",
+      "background:#222;color:#fff;border:1px solid #444;border-radius:4px;font:12px system-ui;flex:1");
+    [{ id: "none", label: "no frame" }].concat(${JSON.stringify(DEVICES)}).forEach(function (d) {
+      var option = document.createElement("option");
+      option.value = d.id;
+      option.textContent = d.label;
+      if (FRAME ? d.id === FRAME.device : d.id === "none") option.selected = true;
+      devSelect.appendChild(option);
+    });
+    devSelect.onchange = function () {
+      navigate(NETWORK, devSelect.value, FRAME ? FRAME.landscape : false);
+    };
+    devRow.appendChild(devSelect);
+    if (FRAME) {
+      devRow.appendChild(chip("rotate", function () {
+        navigate(NETWORK, FRAME.device, !FRAME.landscape);
+      }));
+    }
+    panel.appendChild(devRow);
+
+    // chaos rows — hooks live in the game page; inside the preview iframe
+    // when framed, so resolve them lazily at click time.
+    function getEnv() {
+      var iframe = document.getElementById("__romu_frame__");
+      var win = iframe && iframe.contentWindow ? iframe.contentWindow : window;
+      return win.__ROMU_ENV__;
+    }
+    var hasEnv = FRAME ? true : !!window.__ROMU_ENV__;
+    if (hasEnv) {
       var volRow = row("volume");
       var slider = el("input",
         "flex:1;accent-color:#e94560;cursor:pointer");
@@ -117,17 +179,19 @@ export function devPanel(networks: string[], selected: string): string {
       var volLabel = el("span", "min-width:30px;text-align:right;font:11px ui-monospace,monospace", "100");
       slider.oninput = function () {
         volLabel.textContent = slider.value;
-        env.setVolume(Number(slider.value) / 100);
+        var env = getEnv();
+        if (env && env.setVolume) env.setVolume(Number(slider.value) / 100);
       };
       volRow.appendChild(slider);
       volRow.appendChild(volLabel);
       panel.appendChild(volRow);
-    }
-    if (env && env.setViewable) {
+
       var viewRow = row("ad");
       viewRow.title = "Simulates the container hiding the ad (user scrolled away). The game should pause.";
       var adVisible = true;
       var toggle = chip("hide ad", function () {
+        var env = getEnv();
+        if (!env || !env.setViewable) return;
         adVisible = !adVisible;
         env.setViewable(adVisible);
         toggle.textContent = adVisible ? "hide ad" : "show ad";
@@ -207,6 +271,50 @@ export function devPanel(networks: string[], selected: string): string {
 
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
 })();`;
+}
+
+/**
+ * The phone-framed preview shell: a dark page centering a bezeled iframe at
+ * the chosen viewport, with the overlay panel controlling both the frame and
+ * the game inside it. The iframe loads the normal dev page with __framed=1
+ * so the game gets its environment scripts but no second overlay.
+ */
+export function frameShell(
+  networks: string[],
+  selected: string,
+  frame: FrameState,
+): string {
+  const preset = DEVICES.find((d) => d.id === frame.device) ?? DEVICES[0];
+  const [w = 360, h = 640] = (preset as { id: string }).id
+    .split("x")
+    .map(Number);
+  const width = frame.landscape ? h : w;
+  const height = frame.landscape ? w : h;
+  const gameUrl =
+    selected === SIMULATOR
+      ? "/?__framed=1"
+      : `/?__framed=1&network=${encodeURIComponent(selected)}`;
+  const label = `${preset?.label ?? frame.device}${frame.landscape ? " · landscape" : ""} — ${selected}`;
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>romu preview</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #17171d; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; font: 12px system-ui, sans-serif; color: #888; }
+  .bezel { background: #000; border: 2px solid #333; border-radius: 26px; padding: 14px 10px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+  iframe { display: block; width: ${width}px; height: ${height}px; border: 0; border-radius: 14px; background: #1a1a2e; }
+</style>
+<script>${devHelpers()}</script>
+<script>${devPanel(networks, selected, frame)}</script>
+</head>
+<body>
+<div class="bezel"><iframe id="__romu_frame__" src="${gameUrl}"></iframe></div>
+<div>${label}</div>
+</body>
+</html>`;
 }
 
 /**

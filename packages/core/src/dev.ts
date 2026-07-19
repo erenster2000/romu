@@ -3,7 +3,13 @@ import { createServer } from "vite";
 import type { RomuAdapter } from "./adapter.js";
 import { measure } from "./build.js";
 import { loadConfig } from "./config.js";
-import { devScripts, pickLanUrl, SIMULATOR } from "./devtools.js";
+import {
+  DEVICES,
+  devScripts,
+  frameShell,
+  pickLanUrl,
+  SIMULATOR,
+} from "./devtools.js";
 import { formatBytes } from "./format.js";
 
 export interface DevOptions {
@@ -40,6 +46,24 @@ export async function dev(options: DevOptions = {}): Promise<void> {
       {
         name: "romu:dev-environment",
         configureServer(viteServer) {
+          viteServer.middlewares.use("/__romu/frame", (req, res) => {
+            const query = new URLSearchParams(req.url?.split("?")[1] ?? "");
+            const device = query.get("device") ?? DEVICES[0]?.id ?? "360x640";
+            const requested = query.get("network") ?? fallback;
+            const mockable = adapters
+              .filter((a) => a.devMock)
+              .map((a) => a.name);
+            const selected = mockable.includes(requested)
+              ? requested
+              : SIMULATOR;
+            res.setHeader("Content-Type", "text/html");
+            res.end(
+              frameShell(mockable, selected, {
+                device,
+                landscape: query.get("land") === "1",
+              }),
+            );
+          });
           viteServer.middlewares.use("/__romu/measure", (_req, res) => {
             measure({ cwd, adapters })
               .then((results) => {
@@ -63,11 +87,14 @@ export async function dev(options: DevOptions = {}): Promise<void> {
         transformIndexHtml: {
           order: "pre",
           handler(_html, ctx) {
-            const query = ctx.originalUrl?.split("?")[1] ?? "";
-            const requested =
-              new URLSearchParams(query).get("network") ?? fallback;
+            const query = new URLSearchParams(
+              ctx.originalUrl?.split("?")[1] ?? "",
+            );
+            const requested = query.get("network") ?? fallback;
+            // Inside the framed preview the shell owns the overlay.
+            const framed = query.get("__framed") === "1";
             const { scripts } = devScripts(requested, config, adapters, {
-              overlay,
+              overlay: overlay && !framed,
             });
             return scripts.map((children) => ({
               tag: "script",

@@ -2,79 +2,84 @@
 
 ## Guiding principle: the walking skeleton
 
-The classic way framework projects die is months of infrastructure with nothing
-running end-to-end. The antidote: get the **thinnest end-to-end thread** working
-first (scaffold → play → build, however crude), then thicken that thread with every
-phase. Each phase ends with something demoable — which, for an open-source project,
-also means something to share.
+Get the thinnest end-to-end thread working first, then thicken it with every
+phase. Each phase ends with something demoable. It worked: the v1 thread went
+from empty repo to published packages in five phases.
 
-## v1 in one sentence
+## Status
 
-> A stranger can run `npm create romu`, scaffold a project from a single template,
-> play it in `romu dev`, and get valid, uploadable packages for
-> **Meta + AppLovin + Unity LevelPlay** from `romu build`.
+**v0.1.x is live on npm** (July 19, 2026): `npm create romu` scaffolds a
+Pixi.js playable and `romu build` produces validated single-file packages for
+Meta, AppLovin, and Unity LevelPlay. Releases are automated — changesets on
+`main` open a Version Packages PR; merging it publishes.
 
-Everything not in that sentence is post-v1: simulator UI, genre templates, variant
-matrix, Three.js, low-end device mode...
+| Phase | Scope | Status |
+|---|---|---|
+| 0 | Monorepo foundation (pnpm, Turborepo, CI, Changesets) | ✅ |
+| 1 | Walking skeleton: `romu dev`, naive build, Meta adapter, example game | ✅ |
+| 2 | Source-verified spec registry, AppLovin + LevelPlay adapters, generic linter, `romu check` | ✅ |
+| 3 | Asset pipeline: WebP inlining, size breakdown (engine/game/assets) | ✅ |
+| 4 | `create-romu`, README, VitePress docs, npm release → **v0.1.0** | ✅ |
+| 5 | Dev experience (below) | ✅ |
+| 6 | Game layer + low-end device tooling | next |
+| 7 | Adapter expansion | planned |
+| 8 | Genre templates | planned |
 
-## Phases to v1
+## Phase 5 — Dev experience (shipped)
 
-### Phase 0 — Foundation *(~1 week)*
-Monorepo skeleton: pnpm workspaces, Turborepo, Biome, Vitest, GitHub Actions,
-Changesets. Empty-but-wired `core`, `cli`, `sdk`, `specs` packages.
-**Done when:** `pnpm build` compiles all packages in dependency order, CI is green.
+- **Emulated network environments**: the adapter's real production bridge
+  running against a mock ad container (`mraid`/`dapi`/`FbPlayableAd` with
+  realistic readiness/viewability timing), switchable per page load. Adapters
+  ship their own mock via the optional `devMock()` contract member.
+- **On-device testing**: LAN-exposed dev server + terminal QR code, hot
+  reload included; LAN URL selection avoids virtual interfaces.
+- **Overlay panel**: corner badge → panel with environment picker, volume
+  slider and ad-visibility toggle (chaos controls driving real container
+  events), and a size HUD running the actual build pipeline in memory with
+  color-coded budget bars. `Ctrl+.` hides it; `--no-overlay` disables it.
+- **SDK lifecycle growth**: `onVolumeChange` (0..1 normalized) and
+  `onPause`/`onResume` (viewability-driven — games must freeze while hidden).
+- **Phone-framed preview**: `/__romu/frame` shell with viewport presets
+  (Android S 360×640 default, phone M/L, tablet) and rotation; the panel
+  controls the game inside the frame.
 
-### Phase 1 — Walking skeleton *(~2–3 weeks)*
-The thinnest end-to-end thread: a hand-written Pixi game in `examples/`; `romu dev`
-(first programmatic Vite server); `romu build` (naive single-HTML inlining, no
-compression); SDK with just `cta()` + `onReady()` + the simulator bridge; **one
-adapter: Meta**.
-**Done when:** `dist/meta/playable.html` runs in a browser and the CTA flows
-through the bridge. The framework's heart beats for the first time.
+## Phase 6 — Game layer + low-end device tooling
 
-### Phase 2 — Spec registry + real adapters *(~2–3 weeks)*
-First three entries in `@romujs/specs`; the adapter contract finalized; AppLovin and
-Unity LevelPlay (dapi) adapters; the spec linter + `romu check`; first size report.
-**Done when:** `romu build --network all` produces three valid packages, each
-manually verified against the networks' **official test tools**. That verification
-is the real work of this phase — it's where we learn the specs from reality, not
-from PDFs.
+The `@romujs/pixi` package plus the performance story, which belongs with it:
 
-### Phase 3 — Asset pipeline *(~2 weeks)*
-WebP conversion via sharp, audio compression, real base64 inlining; a size budget
-report showing per-asset cost with the engine as its own line item.
-**Done when:** the example game fits comfortably under every configured network's
-size limit and the report says who costs how many KB.
+- Playable flow machine (load → tutorial → gameplay → end card, with
+  industry timing rules), responsive layout system, ready-made components
+  (tutorial hand, CTA button, end card), audio manager wired to
+  `onVolumeChange`/`onPause`.
+- **Low-end device simulation** (moved here from phase 5): FPS meter and
+  long-frame warnings in the overlay; an in-page "CPU tax" throttle that also
+  works on devices; optionally real CDP-driven CPU throttling via a managed
+  Chrome. Draw-call / texture-memory warnings come from the Pixi layer, which
+  is why this lives in phase 6.
 
-### Phase 4 — DX polish and release → v1 🚀 *(~2 weeks)*
-`create-romu` (interactive clack prompts) + one Pixi template; README + VitePress
-docs (getting started, config reference, writing-an-adapter guide); first npm
-release via Changesets (v0.1.0, "public alpha").
-**Done when:** the v1 sentence can be lived end-to-end by a stranger.
+## Phase 7 — Adapter expansion
 
-Total: roughly **2–2.5 months** at side-project pace (half that full-time).
-Estimates are soft — what's locked is the phase order and the done criteria.
+Mintegral, Vungle/Liftoff, Google, TikTok/Pangle, Moloco — each lands with a
+sourced spec entry, a bridge, a dev mock, and verification against the
+network's official test tool. The community adapter guide matures alongside.
 
-## Post-v1 horizon (ordered, undated)
+## Phase 8 — Genre templates
 
-- **Phase 5 — Dev experience:** phone-framed preview, network simulator panel,
-  QR on-device testing, live size HUD
-- **Phase 6 — Game layer (`@romujs/pixi`):** playable flow machine, responsive
-  system, tutorial hand / end card components, audio manager
-- **Phase 7 — Adapter expansion:** Mintegral, Vungle/Liftoff, Google,
-  TikTok/Pangle, Moloco + a mature community adapter guide
-- **Phase 8 — Genre templates:** runner, pin-pull, match-3... (where the game
-  design muscle shows)
-- **Beyond:** variant matrix, shareable previews, video fallback, low-end device
-  simulation, `@romujs/three`
+`npm create romu --template runner|pin-pull|match3` — skeletons with working
+mechanics designed around conversion patterns, not tech demos.
 
-The ordering logic: phases 5–6 improve life for existing users (retention),
-phases 7–8 bring new users (growth) — harden the product first, then widen it.
+## Beyond
+
+Variant build matrix (language × network × A/B), shareable preview pages,
+video fallback capture, `@romujs/three`.
 
 ## Decisions taken
 
 | Decision | Rationale |
 |---|---|
-| First adapter: **Meta** | Most-requested network with the strictest content rules (single file, no external calls, no mraid), so passing it first de-risks everything after |
-| Game layer is **post-v1** | v1 users write vanilla Pixi + our SDK; Romu's core value is the publish side |
-| Release v1 as **0.1.0 public alpha** | Honest signal: usable, APIs may still move |
+| First adapter: Meta | Most-requested network with the strictest content rules; passing it first de-risked the rest |
+| Game layer post-v1 | Romu's core value is the publish side; v1 users write vanilla Pixi + the SDK |
+| v1 as 0.1.0 public alpha | Honest signal: usable, APIs may move |
+| npm scope `@romujs`, CLI package `romujs` | "romu" org was taken; unscoped `romu` blocked by npm's typosquat filter (≈"rome"). The binary is still `romu` — UX unchanged |
+| Meta spec: 5 MB | Corrected from the widely-cited 2 MB against Meta's current help page — the registry working as intended |
+| Low-end device simulation in phase 6 | CPU throttling is a standalone feature; draw-call/texture warnings need the Pixi layer anyway |
