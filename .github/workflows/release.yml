@@ -10,10 +10,14 @@ jobs:
   release:
     # Requires the NPM_TOKEN repo secret. With unreleased changesets on main,
     # this opens/updates a "Version Packages" PR; merging that PR publishes.
+    # Until the secret exists, the publish step is skipped so the workflow
+    # stays green.
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+    env:
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +35,7 @@ jobs:
         run: pnpm build
 
       - name: Create release PR or publish
+        if: env.HAS_NPM_TOKEN == 'true'
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
