@@ -64,6 +64,24 @@ export function devToolbar(networks: string[], selected: string): string {
 }
 
 /**
+ * Picks the LAN URL a phone can actually reach. Multi-interface machines
+ * (VPNs, VMs, container bridges) surface bogus addresses first, so prefer
+ * real private ranges and never loopback: 192.168.* > 10.* > 172.16-31.*.
+ */
+export function pickLanUrl(urls: string[]): string | undefined {
+  const score = (url: string): number => {
+    if (url.includes("//127.")) return -1;
+    if (url.includes("//192.168.")) return 3;
+    if (/\/\/10\./.test(url)) return 2;
+    if (/\/\/172\.(1[6-9]|2\d|3[01])\./.test(url)) return 1;
+    return 0;
+  };
+  return urls
+    .filter((url) => score(url) >= 0)
+    .sort((a, b) => score(b) - score(a))[0];
+}
+
+/**
  * Everything to inject for one page load: helpers, then the environment
  * (network mock + that network's real bridge, or the generic simulator),
  * then the picker. Pure — easy to test.

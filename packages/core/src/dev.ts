@@ -2,7 +2,7 @@ import { createRequire } from "node:module";
 import { createServer } from "vite";
 import type { RomuAdapter } from "./adapter.js";
 import { loadConfig } from "./config.js";
-import { devScripts, SIMULATOR } from "./devtools.js";
+import { devScripts, pickLanUrl, SIMULATOR } from "./devtools.js";
 
 export interface DevOptions {
   /** Project root; defaults to the current working directory. */
@@ -63,7 +63,7 @@ export async function dev(options: DevOptions = {}): Promise<void> {
   );
   server.printUrls();
 
-  const lanUrl = server.resolvedUrls?.network[0];
+  const lanUrl = pickLanUrl(server.resolvedUrls?.network ?? []);
   if (lanUrl) {
     const require = createRequire(import.meta.url);
     const qrcode = require("qrcode-terminal") as {

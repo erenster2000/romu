@@ -65,3 +65,18 @@ describe("devScripts", () => {
     expect(scripts[0]).toContain("__ROMU_DEV__");
   });
 });
+
+describe("pickLanUrl", () => {
+  it("prefers real Wi-Fi ranges over virtual interfaces and loopback", async () => {
+    const { pickLanUrl } = await import("./devtools.js");
+    expect(
+      pickLanUrl([
+        "http://127.160.246.5:5173/",
+        "http://172.26.11.149:5173/",
+        "http://192.168.1.13:5173/",
+      ]),
+    ).toBe("http://192.168.1.13:5173/");
+    expect(pickLanUrl(["http://127.0.0.1:5173/"])).toBeUndefined();
+    expect(pickLanUrl([])).toBeUndefined();
+  });
+});
