@@ -1,0 +1,28 @@
+{
+  "name": "create-romu",
+  "version": "0.1.0",
+  "description": "Scaffold a Romu playable ad project — npm create romu",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/create-romu"
+  },
+  "bin": {
+    "create-romu": "./bin/create-romu.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/scaffold.ts --format esm --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "picocolors": "^1.1.0"
+  }
+}

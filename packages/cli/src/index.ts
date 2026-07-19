@@ -4,11 +4,16 @@
  * nicely. Anything smarter than that belongs in core.
  */
 
+import { createRequire } from "node:module";
 import { applovinAdapter } from "@romu/adapter-applovin";
 import { levelplayAdapter } from "@romu/adapter-levelplay";
 import { metaAdapter } from "@romu/adapter-meta";
 import { build, check, dev, knownNetworks, type RomuAdapter } from "@romu/core";
 import { Command } from "commander";
+
+const { version } = createRequire(import.meta.url)("../package.json") as {
+  version: string;
+};
 
 /** Adapters that ship with the CLI. */
 const builtinAdapters: RomuAdapter[] = [
@@ -22,7 +27,7 @@ const program = new Command();
 program
   .name("romu")
   .description("The open-source framework for building playable ads")
-  .version("0.0.0");
+  .version(version);
 
 program
   .command("dev")

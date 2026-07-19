@@ -1,6 +1,6 @@
 {
   "name": "@romu/sdk",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The unified playable ad SDK — one API, every ad network",
   "type": "module",
   "license": "MIT",

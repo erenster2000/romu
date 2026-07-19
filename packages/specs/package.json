@@ -1,6 +1,6 @@
 {
   "name": "@romu/specs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Machine-readable ad network specs for playable ads — limits, formats, CTA APIs",
   "type": "module",
   "license": "MIT",

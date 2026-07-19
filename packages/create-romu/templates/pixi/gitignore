@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.romu/
+*.log
+.DS_Store

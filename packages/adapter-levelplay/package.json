@@ -1,6 +1,6 @@
 {
   "name": "@romu/adapter-levelplay",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Romu adapter for Unity LevelPlay (ironSource) playable ads (dapi)",
   "type": "module",
   "license": "MIT",

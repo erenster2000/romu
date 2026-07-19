@@ -1,6 +1,6 @@
 {
   "name": "@romu/adapter-applovin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Romu adapter for AppLovin playable ads (MRAID)",
   "type": "module",
   "license": "MIT",

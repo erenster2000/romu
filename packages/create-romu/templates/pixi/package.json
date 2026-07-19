@@ -1,7 +1,7 @@
 {
-  "name": "tap-game-example",
+  "name": "romu-playable",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "romu dev",
@@ -9,11 +9,11 @@
     "check": "romu check"
   },
   "dependencies": {
-    "@romu/sdk": "workspace:*",
+    "@romu/sdk": "^0.1.0",
     "pixi.js": "^8.6.0"
   },
   "devDependencies": {
-    "romu": "workspace:*",
+    "romu": "^0.1.0",
     "typescript": "^5.9.0"
   }
 }
