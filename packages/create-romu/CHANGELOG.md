@@ -1,5 +1,12 @@
 # create-romu
 
+## 0.1.1
+
+### Patch Changes
+
+- Template now depends on `romujs` (the CLI's published name) instead of the
+  unpublishable `romu`, fixing `npm install` in freshly scaffolded projects.
+
 ## 0.1.0
 
 ### Minor Changes
