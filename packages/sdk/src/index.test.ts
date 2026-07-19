@@ -77,3 +77,36 @@ describe("onVolumeChange", () => {
     expect(() => onVolumeChange(vi.fn())).not.toThrow();
   });
 });
+
+describe("onPause / onResume", () => {
+  it("subscribe through the bridge when supported", async () => {
+    const { onPause, onResume } = await import("./index.js");
+    const pause = vi.fn((cb: () => void) => cb());
+    const resume = vi.fn((cb: () => void) => cb());
+    vi.stubGlobal("window", {
+      __ROMU_BRIDGE__: {
+        cta: vi.fn(),
+        onReady: vi.fn(),
+        onPause: pause,
+        onResume: resume,
+      },
+    });
+    const paused = vi.fn();
+    const resumed = vi.fn();
+
+    onPause(paused);
+    onResume(resumed);
+
+    expect(paused).toHaveBeenCalledOnce();
+    expect(resumed).toHaveBeenCalledOnce();
+  });
+
+  it("are silent no-ops on bridges without lifecycle APIs", async () => {
+    const { onPause, onResume } = await import("./index.js");
+    vi.stubGlobal("window", {
+      __ROMU_BRIDGE__: { cta: vi.fn(), onReady: vi.fn() },
+    });
+    expect(() => onPause(vi.fn())).not.toThrow();
+    expect(() => onResume(vi.fn())).not.toThrow();
+  });
+});

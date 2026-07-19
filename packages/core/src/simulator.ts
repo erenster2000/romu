@@ -9,6 +9,8 @@ import type { RomuConfig } from "./config.js";
 export function simulatorBridge(config: RomuConfig): string {
   return `window.__ROMU_BRIDGE__ = (function () {
   var volumeListeners = [];
+  var pauseListeners = [];
+  var resumeListeners = [];
   function toast(message) {
     if (window.__ROMU_DEV__) { window.__ROMU_DEV__.toast(message); return; }
     console.log("[romu-sim]", message);
@@ -20,6 +22,7 @@ export function simulatorBridge(config: RomuConfig): string {
     },
     setViewable: function (viewable) {
       console.log("[romu-sim] viewable \\u2192", viewable);
+      (viewable ? resumeListeners : pauseListeners).slice().forEach(function (cb) { cb(); });
     }
   };
   return {
@@ -34,9 +37,9 @@ export function simulatorBridge(config: RomuConfig): string {
         cb();
       }
     },
-    onVolumeChange: function (cb) {
-      volumeListeners.push(cb);
-    }
+    onVolumeChange: function (cb) { volumeListeners.push(cb); },
+    onPause: function (cb) { pauseListeners.push(cb); },
+    onResume: function (cb) { resumeListeners.push(cb); }
   };
 })();`;
 }

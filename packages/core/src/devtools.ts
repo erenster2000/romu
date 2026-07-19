@@ -82,7 +82,7 @@ export function devPanel(networks: string[], selected: string): string {
 
     panel = el("div",
       "background:#111;border:1px solid #333;border-radius:10px;padding:10px 12px;" +
-      "min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:none");
+      "min-width:310px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:none");
 
     // environment row
     var envRow = row("env");
@@ -108,35 +108,71 @@ export function devPanel(networks: string[], selected: string): string {
     var env = window.__ROMU_ENV__;
     if (env && env.setVolume) {
       var volRow = row("volume");
-      [["0", 0], ["50", 0.5], ["100", 1]].forEach(function (pair) {
-        volRow.appendChild(chip(pair[0], function () { env.setVolume(pair[1]); }));
-      });
+      var slider = el("input",
+        "flex:1;accent-color:#e94560;cursor:pointer");
+      slider.type = "range";
+      slider.min = "0";
+      slider.max = "100";
+      slider.value = "100";
+      var volLabel = el("span", "min-width:30px;text-align:right;font:11px ui-monospace,monospace", "100");
+      slider.oninput = function () {
+        volLabel.textContent = slider.value;
+        env.setVolume(Number(slider.value) / 100);
+      };
+      volRow.appendChild(slider);
+      volRow.appendChild(volLabel);
       panel.appendChild(volRow);
     }
     if (env && env.setViewable) {
-      var viewRow = row("visible");
-      viewRow.appendChild(chip("hide", function () { env.setViewable(false); }));
-      viewRow.appendChild(chip("show", function () { env.setViewable(true); }));
+      var viewRow = row("ad");
+      viewRow.title = "Simulates the container hiding the ad (user scrolled away). The game should pause.";
+      var adVisible = true;
+      var toggle = chip("hide ad", function () {
+        adVisible = !adVisible;
+        env.setViewable(adVisible);
+        toggle.textContent = adVisible ? "hide ad" : "show ad";
+      });
+      viewRow.appendChild(toggle);
       panel.appendChild(viewRow);
     }
 
-    // size HUD
-    var sizeRow = row("size");
-    var sizeOut = el("div", "font:11px ui-monospace,monospace;white-space:pre;flex:1", "not measured");
+    // size HUD — one aligned row per network with a budget bar
+    var sizeBox = el("div", "margin-top:7px");
+    var sizeHead = row("size");
+    var sizeStatus = el("span", "opacity:.5;flex:1", "not measured");
     var measureBtn = chip("measure", function () {
-      sizeOut.textContent = "building\\u2026";
+      sizeStatus.textContent = "building\\u2026";
       fetch("/__romu/measure")
         .then(function (r) { return r.json(); })
         .then(function (results) {
-          sizeOut.textContent = results.map(function (r) {
-            return r.network + "  " + r.pretty + " (" + r.pct + "%)";
-          }).join("\\n");
+          sizeStatus.textContent = "";
+          sizeBox.querySelectorAll(".romu-size-row").forEach(function (n) { n.remove(); });
+          results.forEach(function (r) {
+            var line = el("div",
+              "display:flex;gap:8px;align-items:center;margin-top:5px");
+            line.className = "romu-size-row";
+            line.appendChild(el("span", "min-width:64px;font:11px ui-monospace,monospace", r.network));
+            var track = el("div",
+              "flex:1;height:6px;background:#2a2a2a;border-radius:3px;overflow:hidden");
+            var color = r.pct < 60 ? "#3fb27f" : r.pct < 90 ? "#e0a63c" : "#e94560";
+            var fill = el("div", "height:100%;border-radius:3px;background:" + color);
+            fill.style.width = Math.min(r.pct, 100) + "%";
+            track.appendChild(fill);
+            line.appendChild(track);
+            line.appendChild(el("span",
+              "font:11px ui-monospace,monospace;opacity:.85;min-width:96px;text-align:right",
+              r.pretty.replace(" / ", "\\u2009/\\u2009") ));
+            line.appendChild(el("span",
+              "font:11px ui-monospace,monospace;min-width:34px;text-align:right", r.pct + "%"));
+            sizeBox.appendChild(line);
+          });
         })
-        .catch(function () { sizeOut.textContent = "measure failed"; });
+        .catch(function () { sizeStatus.textContent = "measure failed"; });
     });
-    sizeRow.appendChild(sizeOut);
-    sizeRow.appendChild(measureBtn);
-    panel.appendChild(sizeRow);
+    sizeHead.appendChild(sizeStatus);
+    sizeHead.appendChild(measureBtn);
+    sizeBox.appendChild(sizeHead);
+    panel.appendChild(sizeBox);
 
     var hint = el("div", "opacity:.4;margin-top:8px;font:10px system-ui", "Ctrl+. hides \\u00b7 romu dev");
     panel.appendChild(hint);

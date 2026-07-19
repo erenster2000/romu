@@ -16,6 +16,10 @@ export interface RomuBridge {
    * volume normalized to 0..1. Networks without a volume API never call it.
    */
   onVolumeChange?(callback: (volume: number) => void): void;
+  /** Invoke when the container hides the ad — the game should freeze. */
+  onPause?(callback: () => void): void;
+  /** Invoke when the container shows the ad again — the game may continue. */
+  onResume?(callback: () => void): void;
 }
 
 declare global {
@@ -52,6 +56,20 @@ export function cta(): void {
  */
 export function onVolumeChange(callback: (volume: number) => void): void {
   bridge()?.onVolumeChange?.(callback);
+}
+
+/**
+ * Runs the callback whenever the container hides the ad (e.g. the user
+ * scrolled it away). Freeze gameplay and mute audio here — networks reject
+ * playables that keep burning CPU while invisible.
+ */
+export function onPause(callback: () => void): void {
+  bridge()?.onPause?.(callback);
+}
+
+/** Counterpart of onPause: the ad is visible again, the game may continue. */
+export function onResume(callback: () => void): void {
+  bridge()?.onResume?.(callback);
 }
 
 /**

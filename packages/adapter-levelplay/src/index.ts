@@ -62,6 +62,20 @@ export const levelplayAdapter: RomuAdapter = {
           cb(typeof volume === "number" ? volume / 100 : 0);
         });
       }
+    },
+    onPause: function (cb) {
+      if (typeof dapi !== "undefined" && dapi.addEventListener) {
+        dapi.addEventListener("viewableChange", function (event) {
+          if (event && !event.isViewable) cb();
+        });
+      }
+    },
+    onResume: function (cb) {
+      if (typeof dapi !== "undefined" && dapi.addEventListener) {
+        dapi.addEventListener("viewableChange", function (event) {
+          if (event && event.isViewable) cb();
+        });
+      }
     }
   };
 })();`;

@@ -4,7 +4,7 @@
  * real image assets flowing through the asset pipeline as inlined WebP.
  */
 
-import { cta, onReady, onVolumeChange } from "@romujs/sdk";
+import { cta, onPause, onReady, onResume, onVolumeChange } from "@romujs/sdk";
 import {
   Application,
   Assets,
@@ -64,6 +64,26 @@ async function start(): Promise<void> {
   app.stage.addChild(muteBadge);
   onVolumeChange((volume) => {
     muteBadge.visible = volume === 0;
+  });
+
+  // Freeze everything while the container says the ad is not visible —
+  // networks reject playables that keep running while hidden.
+  const pausedText = new Text({
+    text: "⏸ paused",
+    style: { fill: "#ffffff", fontSize: 32, fontFamily: "sans-serif" },
+  });
+  pausedText.anchor.set(0.5);
+  pausedText.position.set(app.screen.width / 2, app.screen.height / 2);
+  pausedText.visible = false;
+  onPause(() => {
+    pausedText.visible = true;
+    app.stage.addChild(pausedText); // keep on top
+    app.render(); // draw the paused frame, then stop
+    app.ticker.stop();
+  });
+  onResume(() => {
+    pausedText.visible = false;
+    app.ticker.start();
   });
 
   const target = new Graphics().circle(0, 0, 44).fill("#e94560");

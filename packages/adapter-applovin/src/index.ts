@@ -68,6 +68,20 @@ export const applovinAdapter: RomuAdapter = {
           cb(typeof volume === "number" ? volume / 100 : 0);
         });
       }
+    },
+    onPause: function (cb) {
+      if (typeof mraid !== "undefined" && mraid.addEventListener) {
+        mraid.addEventListener("viewableChange", function (viewable) {
+          if (!viewable) cb();
+        });
+      }
+    },
+    onResume: function (cb) {
+      if (typeof mraid !== "undefined" && mraid.addEventListener) {
+        mraid.addEventListener("viewableChange", function (viewable) {
+          if (viewable) cb();
+        });
+      }
     }
   };
 })();`;
