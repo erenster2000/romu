@@ -65,6 +65,17 @@ export const metaAdapter: RomuAdapter = {
 
     return issues;
   },
+
+  devMock(): string {
+    // Meta's container is the simplest: FbPlayableAd exists from the start
+    // and only receives the CTA signal.
+    return `window.FbPlayableAd = {
+  onCTAClick: function () {
+    window.__ROMU_DEV__ && window.__ROMU_DEV__.toast("FbPlayableAd.onCTAClick()");
+    console.log("[fb-mock] onCTAClick");
+  }
+};`;
+  },
 };
 
 export default metaAdapter;

@@ -105,6 +105,9 @@ importers:
       esbuild:
         specifier: ^0.28.0
         version: 0.28.1
+      qrcode-terminal:
+        specifier: ^0.12.0
+        version: 0.12.0
       sharp:
         specifier: ^0.34.0
         version: 0.34.5
@@ -1908,6 +1911,10 @@ packages:
 
   property-information@7.2.0:
     resolution: {integrity: sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==}
+
+  qrcode-terminal@0.12.0:
+    resolution: {integrity: sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==}
+    hasBin: true
 
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
@@ -3880,6 +3887,8 @@ snapshots:
   prettier@2.8.8: {}
 
   property-information@7.2.0: {}
+
+  qrcode-terminal@0.12.0: {}
 
   quansync@0.2.11: {}
 

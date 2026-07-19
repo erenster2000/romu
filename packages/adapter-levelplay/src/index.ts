@@ -83,6 +83,44 @@ export const levelplayAdapter: RomuAdapter = {
 
     return issues;
   },
+
+  devMock(): string {
+    // A fake dapi container: ready after a delay, viewable a beat later,
+    // viewableChange delivers { isViewable } objects like the real one.
+    return `window.dapi = (function () {
+  var ready = false;
+  var viewable = false;
+  var listeners = {};
+  function emit(event, payload) {
+    (listeners[event] || []).slice().forEach(function (cb) { cb(payload); });
+  }
+  setTimeout(function () {
+    ready = true;
+    emit("ready");
+    window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[dapi-mock] ready");
+    setTimeout(function () {
+      viewable = true;
+      emit("viewableChange", { isViewable: true });
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[dapi-mock] viewable");
+    }, 800);
+  }, 300);
+  return {
+    isReady: function () { return ready; },
+    isViewable: function () { return viewable; },
+    getAudioVolume: function () { return 100; },
+    addEventListener: function (event, cb) {
+      (listeners[event] = listeners[event] || []).push(cb);
+    },
+    removeEventListener: function (event, cb) {
+      listeners[event] = (listeners[event] || []).filter(function (x) { return x !== cb; });
+    },
+    openStoreUrl: function () {
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.toast("dapi.openStoreUrl()");
+      console.log("[dapi-mock] openStoreUrl");
+    }
+  };
+})();`;
+  },
 };
 
 export default levelplayAdapter;

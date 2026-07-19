@@ -38,8 +38,14 @@ program
 program
   .command("dev")
   .description("Start the dev server with the network simulator")
-  .action(async () => {
-    await run(() => dev());
+  .option(
+    "--network <name>",
+    "start in a network's emulated environment (e.g. applovin)",
+  )
+  .action(async (options: { network?: string }) => {
+    await run(() =>
+      dev({ adapters: builtinAdapters, network: options.network }),
+    );
   });
 
 program

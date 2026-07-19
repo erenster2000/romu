@@ -3,11 +3,22 @@
 The `romu` CLI ships with your project (`npm install` puts it in
 `node_modules/.bin`), so the npm scripts in a scaffolded project just work.
 
-## `romu dev`
+## `romu dev [--network <id>]`
 
-Vite dev server with hot reload and the **simulator bridge** injected: SDK
-calls work without any ad container. CTA clicks log to the console and show an
-on-screen toast.
+Vite dev server with hot reload. By default the **simulator bridge** is
+injected: SDK calls work without any ad container, and CTA clicks log to the
+console with an on-screen toast.
+
+**Emulated environments.** The floating "romu env" picker (or `?network=<id>`
+in the URL, or the `--network` flag) switches the page into a network's
+emulated environment: the adapter's **real production bridge** runs against a
+mock ad container — a fake `mraid`/`dapi`/`FbPlayableAd` with realistic
+readiness and viewability timing. Games that start before the container allows
+it surface here instead of in network review.
+
+**On-device testing.** The server listens on your LAN and prints a QR code in
+the terminal — scan it with a phone on the same Wi-Fi. Hot reload works on the
+device too. (macOS may ask to allow incoming connections on first run.)
 
 ## `romu build [--network <id>]`
 

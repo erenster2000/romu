@@ -89,6 +89,46 @@ export const applovinAdapter: RomuAdapter = {
 
     return issues;
   },
+
+  devMock(): string {
+    // A fake MRAID container: starts in "loading", fires ready shortly after,
+    // becomes viewable a beat later — the timing games actually get wrong.
+    return `window.mraid = (function () {
+  var state = "loading";
+  var viewable = false;
+  var listeners = {};
+  function emit(event) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    (listeners[event] || []).slice().forEach(function (cb) {
+      cb.apply(null, args);
+    });
+  }
+  setTimeout(function () {
+    state = "default";
+    emit("ready");
+    window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[mraid-mock] ready");
+    setTimeout(function () {
+      viewable = true;
+      emit("viewableChange", true);
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[mraid-mock] viewable");
+    }, 800);
+  }, 300);
+  return {
+    getState: function () { return state; },
+    isViewable: function () { return viewable; },
+    addEventListener: function (event, cb) {
+      (listeners[event] = listeners[event] || []).push(cb);
+    },
+    removeEventListener: function (event, cb) {
+      listeners[event] = (listeners[event] || []).filter(function (x) { return x !== cb; });
+    },
+    open: function (url) {
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.toast("mraid.open \\u2192 " + url);
+      console.log("[mraid-mock] open:", url);
+    }
+  };
+})();`;
+  },
 };
 
 export default applovinAdapter;

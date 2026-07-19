@@ -20,6 +20,7 @@ export type { RomuConfig } from "./config.js";
 export { configSchema, defineConfig, loadConfig } from "./config.js";
 export type { DevOptions } from "./dev.js";
 export { dev } from "./dev.js";
+export { devScripts, SIMULATOR } from "./devtools.js";
 export { formatBytes } from "./format.js";
 export { injectBridge, inlineHtml } from "./inline.js";
 export { lintPackage } from "./lint.js";
