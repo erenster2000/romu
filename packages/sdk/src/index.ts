@@ -9,6 +9,8 @@
 export interface RomuBridge {
   /** Send the user to the app store, the way the current network wants it. */
   cta(): void;
+  /** Invoke the callback when the ad container says the playable may start. */
+  onReady(callback: () => void): void;
 }
 
 declare global {
@@ -36,4 +38,24 @@ export function cta(): void {
     return;
   }
   b.cta();
+}
+
+/**
+ * Runs the callback when the playable is allowed to start. Each network
+ * signals this differently; the bridge normalizes it. Without a bridge
+ * (e.g. the raw HTML opened directly), falls back to DOM readiness so the
+ * game still runs.
+ */
+export function onReady(callback: () => void): void {
+  const b = bridge();
+  if (b) {
+    b.onReady(callback);
+    return;
+  }
+  if (typeof document === "undefined") return;
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => callback());
+  } else {
+    callback();
+  }
 }

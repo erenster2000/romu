@@ -4,8 +4,12 @@
  * nicely. Anything smarter than that belongs in core.
  */
 
-import { build, dev, knownNetworks } from "@romu/core";
+import { metaAdapter } from "@romu/adapter-meta";
+import { build, dev, knownNetworks, type RomuAdapter } from "@romu/core";
 import { Command } from "commander";
+
+/** Adapters that ship with the CLI. Phase 2 makes this list configurable. */
+const builtinAdapters: RomuAdapter[] = [metaAdapter];
 
 const program = new Command();
 
@@ -26,7 +30,9 @@ program
   .description("Build publish-ready packages for ad networks")
   .option("--network <name>", "target network, or 'all'", "all")
   .action(async (options: { network: string }) => {
-    await run(() => build({ network: options.network }));
+    await run(() =>
+      build({ network: options.network, adapters: builtinAdapters }),
+    );
   });
 
 program
