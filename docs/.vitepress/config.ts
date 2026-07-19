@@ -1,6 +1,8 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
+  // Served from https://erenster2000.github.io/romu/
+  base: "/romu/",
   title: "Romu",
   description:
     "The open-source framework for building playable ads — one codebase, every ad network.",
