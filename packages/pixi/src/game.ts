@@ -1,6 +1,7 @@
 import { onPause, onReady, onResume } from "@romujs/sdk";
 import { Application, Container } from "pixi.js";
 import { Flow } from "./flow.js";
+import { createLayout } from "./layout.js";
 import { type Rules, startRules } from "./rules.js";
 import type { GameEvent, SceneFactory } from "./scene.js";
 
@@ -51,12 +52,14 @@ async function boot(options: GameOptions): Promise<void> {
   };
 
   const flow = new Flow(options.scenes, {
-    createStage() {
+    createScene() {
       const stage = new Container();
       app.stage.addChild(stage);
-      return stage;
+      const layout = createLayout();
+      layout.apply(app.screen.width, app.screen.height);
+      return { stage, layout };
     },
-    destroyStage(stage) {
+    destroyScene({ stage }) {
       app.stage.removeChild(stage);
       stage.destroy({ children: true });
     },

@@ -13,8 +13,14 @@
  * Pixi + @romujs/sdk keeps working; `romu build` treats both the same.
  */
 
-export { Flow, type FlowHost } from "./flow.js";
+export { Flow, type FlowHost, type ScenePieces } from "./flow.js";
 export { createGame, type GameOptions } from "./game.js";
+export {
+  type Anchor,
+  createLayout,
+  type Layout,
+  type PinOptions,
+} from "./layout.js";
 export {
   type RuleHooks,
   type Rules,

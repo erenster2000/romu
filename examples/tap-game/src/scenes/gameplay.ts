@@ -5,14 +5,15 @@ import bgUrl from "../../assets/images/bg.png";
 
 const TAPS_TO_WIN = 5;
 
-export const gameplay = scene(({ app, stage, go }) => {
+export const gameplay = scene(({ app, stage, layout, go }) => {
   let score = 0;
 
   const background = new Sprite();
   stage.addChild(background);
+  layout.cover(background);
   void Assets.load(bgUrl).then((texture) => {
     background.texture = texture;
-    layoutBackground();
+    layout.refresh(); // texture arrived after layout — re-fit the cover
   });
 
   const scoreText = new Text({
@@ -20,12 +21,14 @@ export const gameplay = scene(({ app, stage, go }) => {
     style: { fill: "#ffffff", fontSize: 28, fontFamily: "sans-serif" },
   });
   stage.addChild(scoreText);
+  layout.pin(scoreText, "top-left", { x: 16, y: 16 });
 
   // React to the container's volume — the game has no audio yet, but the
   // mute badge demonstrates the contract.
   const muteBadge = new Text({ text: "🔇", style: { fontSize: 28 } });
   muteBadge.visible = false;
   stage.addChild(muteBadge);
+  layout.pin(muteBadge, "top-right", { x: 16, y: 16 });
   onVolumeChange((volume) => {
     muteBadge.visible = volume === 0;
   });
@@ -51,24 +54,10 @@ export const gameplay = scene(({ app, stage, go }) => {
     );
   }
 
-  function layoutBackground(): void {
-    if (!background.texture.width) return;
-    const scale = Math.max(
-      app.screen.width / background.texture.width,
-      app.screen.height / background.texture.height,
-    );
-    background.scale.set(scale);
-    background.position.set(
-      (app.screen.width - background.texture.width * scale) / 2,
-      (app.screen.height - background.texture.height * scale) / 2,
-    );
-  }
-
   return {
     resize(w, h) {
-      layoutBackground();
-      scoreText.position.set(16, 16);
-      muteBadge.position.set(w - 48, 16);
+      // The layout handles everything pinned; only the free-roaming target
+      // needs a hand when the screen shrinks under it.
       if (target.x > w - 80 || target.y > h - 80) moveTarget();
     },
   };

@@ -1,4 +1,5 @@
 import type { Application, Container } from "pixi.js";
+import type { Layout } from "./layout.js";
 
 /**
  * What the flow machine expects back from a scene: a plain object with
@@ -26,6 +27,12 @@ export interface SceneContext {
    * an exit() at all.
    */
   stage: Container;
+  /**
+   * This scene's responsive layout: pin objects to screen anchors, cover
+   * backgrounds — re-applied automatically on every resize, cleaned up with
+   * the scene.
+   */
+  layout: Layout;
   /** Move the flow to another scene. The current one exits first. */
   go(name: string): void;
   /** Subscribe to a game event (e.g. "idle"); returns an unsubscribe fn. */

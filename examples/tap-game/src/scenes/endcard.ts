@@ -3,13 +3,13 @@ import { cta } from "@romujs/sdk";
 import { Assets, Container, Graphics, Sprite, Text } from "pixi.js";
 import logoUrl from "../../assets/images/logo.png";
 
-export const endcard = scene(({ stage, on }) => {
+export const endcard = scene(({ stage, layout, on }) => {
   const backdrop = new Graphics();
   stage.addChild(backdrop);
 
   const logo = new Sprite();
-  logo.anchor.set(0.5);
   stage.addChild(logo);
+  layout.pin(logo, "center", { y: -160 });
   void Assets.load(logoUrl).then((texture) => {
     logo.texture = texture;
     logo.width = 140;
@@ -20,8 +20,8 @@ export const endcard = scene(({ stage, on }) => {
     text: "You win!",
     style: { fill: "#ffffff", fontSize: 48, fontFamily: "sans-serif" },
   });
-  title.anchor.set(0.5);
   stage.addChild(title);
+  layout.pin(title, "center", { y: -40 });
 
   const button = new Container();
   const bg = new Graphics().roundRect(-130, -34, 260, 68, 16).fill("#e94560");
@@ -35,6 +35,7 @@ export const endcard = scene(({ stage, on }) => {
   button.cursor = "pointer";
   button.on("pointerdown", () => cta());
   stage.addChild(button);
+  layout.pin(button, "center", { y: 60 });
 
   // The idle rule: nudge the button when the player goes quiet.
   const offIdle = on("idle", () => {
@@ -44,10 +45,8 @@ export const endcard = scene(({ stage, on }) => {
 
   return {
     resize(w, h) {
+      // Full-screen dim needs a redraw — the one thing pins can't express.
       backdrop.clear().rect(0, 0, w, h).fill({ color: "#000000", alpha: 0.7 });
-      logo.position.set(w / 2, h / 2 - 160);
-      title.position.set(w / 2, h / 2 - 40);
-      button.position.set(w / 2, h / 2 + 60);
     },
     exit: offIdle,
   };

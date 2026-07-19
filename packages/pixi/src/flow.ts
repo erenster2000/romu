@@ -1,16 +1,22 @@
 import type { Scene, SceneContext, SceneFactory } from "./scene.js";
 
+/** The per-scene pieces the host creates fresh on every entry. */
+export interface ScenePieces {
+  stage: SceneContext["stage"];
+  layout: SceneContext["layout"];
+}
+
 /**
  * What the flow needs from its host (createGame in production, a stub in
- * tests): fresh per-scene stages and the shared context pieces.
+ * tests): fresh per-scene pieces and the shared context members.
  */
 export interface FlowHost {
-  /** Create and attach a fresh stage for an entering scene. */
-  createStage(): SceneContext["stage"];
-  /** Detach and destroy a leaving scene's stage. */
-  destroyStage(stage: SceneContext["stage"]): void;
+  /** Create and attach a fresh stage + layout for an entering scene. */
+  createScene(): ScenePieces;
+  /** Detach and destroy a leaving scene's pieces. */
+  destroyScene(pieces: ScenePieces): void;
   /** Context members shared by every scene (app, event bus). */
-  context: Omit<SceneContext, "stage" | "go">;
+  context: Omit<SceneContext, "stage" | "layout" | "go">;
 }
 
 /**
@@ -20,7 +26,7 @@ export interface FlowHost {
  */
 export class Flow {
   private current?: Scene;
-  private currentStage?: SceneContext["stage"];
+  private pieces?: ScenePieces;
   currentName?: string;
 
   constructor(
@@ -36,16 +42,16 @@ export class Flow {
     }
 
     if (this.current?.exit) this.current.exit();
-    if (this.currentStage) this.host.destroyStage(this.currentStage);
+    if (this.pieces) this.host.destroyScene(this.pieces);
 
-    const stage = this.host.createStage();
+    const pieces = this.host.createScene();
     const ctx: SceneContext = {
       ...this.host.context,
-      stage,
+      ...pieces,
       go: (next) => this.go(next),
     };
     this.currentName = name;
-    this.currentStage = stage;
+    this.pieces = pieces;
     this.current = factory(ctx) ?? {};
   }
 
@@ -54,6 +60,8 @@ export class Flow {
   }
 
   resize(width: number, height: number): void {
+    // Layout first so scenes can adjust on top of pinned positions.
+    this.pieces?.layout.apply(width, height);
     this.current?.resize?.(width, height);
   }
 }

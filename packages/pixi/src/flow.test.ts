@@ -6,8 +6,11 @@ function makeHost(): FlowHost & { destroyed: unknown[] } {
   const destroyed: unknown[] = [];
   return {
     destroyed,
-    createStage: () => ({}) as SceneContext["stage"],
-    destroyStage: (stage) => destroyed.push(stage),
+    createScene: () => ({
+      stage: {} as SceneContext["stage"],
+      layout: { apply: () => {} } as unknown as SceneContext["layout"],
+    }),
+    destroyScene: (pieces) => destroyed.push(pieces),
     context: {
       app: {} as SceneContext["app"],
       on: () => () => {},
@@ -41,7 +44,7 @@ describe("Flow", () => {
   it("exits and destroys the old scene before entering the new one", () => {
     const order: string[] = [];
     const host = makeHost();
-    host.destroyStage = () => order.push("destroy");
+    host.destroyScene = () => order.push("destroy");
     const flow = new Flow(
       {
         a: () => ({ exit: () => order.push("exit-a") }),
