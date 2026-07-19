@@ -42,9 +42,14 @@ program
     "--network <name>",
     "start in a network's emulated environment (e.g. applovin)",
   )
-  .action(async (options: { network?: string }) => {
+  .option("--no-overlay", "don't inject the dev overlay panel")
+  .action(async (options: { network?: string; overlay: boolean }) => {
     await run(() =>
-      dev({ adapters: builtinAdapters, network: options.network }),
+      dev({
+        adapters: builtinAdapters,
+        network: options.network,
+        overlay: options.overlay,
+      }),
     );
   });
 

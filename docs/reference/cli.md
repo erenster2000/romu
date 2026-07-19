@@ -20,6 +20,13 @@ it surface here instead of in network review.
 the terminal — scan it with a phone on the same Wi-Fi. Hot reload works on the
 device too. (macOS may ask to allow incoming connections on first run.)
 
+**The overlay panel.** A small "R" badge in the corner expands into the dev
+panel: the environment picker, chaos buttons (set container volume to
+0/50/100, toggle ad visibility), and the size HUD — "measure" runs the real
+build pipeline in memory and shows each network's size against its limit.
+The overlay never captures input outside its own box; `Ctrl+.` hides it
+entirely, and `--no-overlay` disables it altogether.
+
 ## `romu build [--network <id>]`
 
 Builds publish-ready packages. Defaults to `--network all` (every network in

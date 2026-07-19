@@ -11,6 +11,11 @@ export interface RomuBridge {
   cta(): void;
   /** Invoke the callback when the ad container says the playable may start. */
   onReady(callback: () => void): void;
+  /**
+   * Invoke the callback when the container's audio volume changes, with the
+   * volume normalized to 0..1. Networks without a volume API never call it.
+   */
+  onVolumeChange?(callback: (volume: number) => void): void;
 }
 
 declare global {
@@ -38,6 +43,15 @@ export function cta(): void {
     return;
   }
   b.cta();
+}
+
+/**
+ * Subscribes to the container's audio volume, normalized to 0..1. Mute your
+ * game's audio when it reaches 0 — several networks require it. On networks
+ * without a volume API (or without a bridge) the callback simply never fires.
+ */
+export function onVolumeChange(callback: (volume: number) => void): void {
+  bridge()?.onVolumeChange?.(callback);
 }
 
 /**

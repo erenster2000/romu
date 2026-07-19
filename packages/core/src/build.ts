@@ -73,9 +73,21 @@ export async function check(
   return results;
 }
 
+/**
+ * The build pipeline in memory, without writing dist/ or printing — what the
+ * dev server's size HUD calls to answer "how big is this playable right now".
+ */
+export async function measure(
+  options: Omit<BuildOptions, "network"> = {},
+): Promise<NetworkResult[]> {
+  const cwd = options.cwd ?? process.cwd();
+  return packageAll(cwd, { ...options, network: "all" }, { silent: true });
+}
+
 async function packageAll(
   cwd: string,
   options: BuildOptions,
+  { silent = false }: { silent?: boolean } = {},
 ): Promise<NetworkResult[]> {
   const config = await loadConfig(cwd);
   const adapters = options.adapters ?? [];
@@ -89,7 +101,7 @@ async function packageAll(
     }
   }
 
-  const inlined = await bundleGame(cwd);
+  const inlined = await bundleGame(cwd, { silent });
 
   return targets.map((name) => {
     // targets are validated above, so the adapter is always found
@@ -108,7 +120,10 @@ const ASSET_MODULE =
   /\.(png|jpe?g|webp|avif|gif|svg|mp3|m4a|aac|ogg|wav|woff2?|ttf|otf)$/i;
 
 /** One Vite build of the user's game, folded into a single HTML string. */
-async function bundleGame(cwd: string): Promise<string> {
+async function bundleGame(
+  cwd: string,
+  { silent = false }: { silent?: boolean } = {},
+): Promise<string> {
   const viteOut = path.join(cwd, ".romu", "vite");
   const assetReport: AssetReport = { entries: [] };
 
@@ -135,7 +150,7 @@ async function bundleGame(cwd: string): Promise<string> {
     },
   })) as Rollup.RollupOutput;
 
-  printBundleReport(codeBreakdown(result), assetReport);
+  if (!silent) printBundleReport(codeBreakdown(result), assetReport);
 
   const rawHtml = await readFile(path.join(viteOut, "index.html"), "utf8");
   // build.base is "./", so asset refs are relative to the output root

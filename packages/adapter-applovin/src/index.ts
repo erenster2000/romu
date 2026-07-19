@@ -60,6 +60,14 @@ export const applovinAdapter: RomuAdapter = {
       } else {
         whenViewable(cb);
       }
+    },
+    onVolumeChange: function (cb) {
+      if (typeof mraid !== "undefined" && mraid.addEventListener) {
+        // MRAID reports percentages; the SDK contract is 0..1.
+        mraid.addEventListener("audioVolumeChange", function (volume) {
+          cb(typeof volume === "number" ? volume / 100 : 0);
+        });
+      }
     }
   };
 })();`;
@@ -113,6 +121,17 @@ export const applovinAdapter: RomuAdapter = {
       window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[mraid-mock] viewable");
     }, 800);
   }, 300);
+  window.__ROMU_ENV__ = {
+    setVolume: function (volume) {
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[mraid-mock] audioVolumeChange", volume);
+      emit("audioVolumeChange", volume * 100);
+    },
+    setViewable: function (value) {
+      viewable = value;
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[mraid-mock] viewableChange", value);
+      emit("viewableChange", value);
+    }
+  };
   return {
     getState: function () { return state; },
     isViewable: function () { return viewable; },

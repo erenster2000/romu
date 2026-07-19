@@ -4,7 +4,7 @@
  * real image assets flowing through the asset pipeline as inlined WebP.
  */
 
-import { cta, onReady } from "@romujs/sdk";
+import { cta, onReady, onVolumeChange } from "@romujs/sdk";
 import {
   Application,
   Assets,
@@ -52,6 +52,19 @@ async function start(): Promise<void> {
   });
   scoreText.position.set(16, 16);
   app.stage.addChild(scoreText);
+
+  // The game has no audio yet, but reacting to container volume is part of
+  // the contract — show a mute badge when the network says volume is 0.
+  const muteBadge = new Text({
+    text: "🔇",
+    style: { fontSize: 28 },
+  });
+  muteBadge.position.set(app.screen.width - 48, 16);
+  muteBadge.visible = false;
+  app.stage.addChild(muteBadge);
+  onVolumeChange((volume) => {
+    muteBadge.visible = volume === 0;
+  });
 
   const target = new Graphics().circle(0, 0, 44).fill("#e94560");
   target.eventMode = "static";

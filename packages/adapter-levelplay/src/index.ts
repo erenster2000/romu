@@ -54,6 +54,14 @@ export const levelplayAdapter: RomuAdapter = {
       } else {
         dapi.addEventListener("ready", function () { whenViewable(cb); });
       }
+    },
+    onVolumeChange: function (cb) {
+      if (typeof dapi !== "undefined" && dapi.addEventListener) {
+        // dapi reports percentages; the SDK contract is 0..1.
+        dapi.addEventListener("audioVolumeChange", function (volume) {
+          cb(typeof volume === "number" ? volume / 100 : 0);
+        });
+      }
     }
   };
 })();`;
@@ -104,6 +112,17 @@ export const levelplayAdapter: RomuAdapter = {
       window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[dapi-mock] viewable");
     }, 800);
   }, 300);
+  window.__ROMU_ENV__ = {
+    setVolume: function (volume) {
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[dapi-mock] audioVolumeChange", volume);
+      emit("audioVolumeChange", volume * 100);
+    },
+    setViewable: function (value) {
+      viewable = value;
+      window.__ROMU_DEV__ && window.__ROMU_DEV__.log("[dapi-mock] viewableChange", value);
+      emit("viewableChange", { isViewable: value });
+    }
+  };
   return {
     isReady: function () { return ready; },
     isViewable: function () { return viewable; },

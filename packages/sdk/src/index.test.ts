@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cta, onReady } from "./index.js";
+import { cta, onReady, onVolumeChange } from "./index.js";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -49,5 +49,31 @@ describe("onReady", () => {
     onReady(callback);
 
     expect(callback).toHaveBeenCalledOnce();
+  });
+});
+
+describe("onVolumeChange", () => {
+  it("subscribes through the bridge when supported", () => {
+    const subscribe = vi.fn((cb: (v: number) => void) => cb(0.5));
+    vi.stubGlobal("window", {
+      __ROMU_BRIDGE__: {
+        cta: vi.fn(),
+        onReady: vi.fn(),
+        onVolumeChange: subscribe,
+      },
+    });
+    const callback = vi.fn();
+
+    onVolumeChange(callback);
+
+    expect(subscribe).toHaveBeenCalledOnce();
+    expect(callback).toHaveBeenCalledWith(0.5);
+  });
+
+  it("is a silent no-op on bridges without a volume API", () => {
+    vi.stubGlobal("window", {
+      __ROMU_BRIDGE__: { cta: vi.fn(), onReady: vi.fn() },
+    });
+    expect(() => onVolumeChange(vi.fn())).not.toThrow();
   });
 });

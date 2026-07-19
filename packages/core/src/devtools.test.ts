@@ -64,6 +64,21 @@ describe("devScripts", () => {
     const { scripts } = devScripts("mock", config, [adapterWith(true)]);
     expect(scripts[0]).toContain("__ROMU_DEV__");
   });
+
+  it("includes the overlay panel by default, with chaos hooks and the size HUD", () => {
+    const { scripts } = devScripts(SIMULATOR, config, [adapterWith(true)]);
+    const joined = scripts.join("\n");
+    expect(joined).toContain("romu-dev-overlay");
+    expect(joined).toContain("__ROMU_ENV__");
+    expect(joined).toContain("/__romu/measure");
+  });
+
+  it("omits the overlay when disabled", () => {
+    const { scripts } = devScripts(SIMULATOR, config, [adapterWith(true)], {
+      overlay: false,
+    });
+    expect(scripts.join("\n")).not.toContain("romu-dev-overlay");
+  });
 });
 
 describe("pickLanUrl", () => {

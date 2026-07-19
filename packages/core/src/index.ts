@@ -15,7 +15,7 @@ export type {
 export type { AssetEntry, AssetReport } from "./assets.js";
 export { romuAssetsPlugin } from "./assets.js";
 export type { BuildOptions, NetworkResult } from "./build.js";
-export { build, check } from "./build.js";
+export { build, check, measure } from "./build.js";
 export type { RomuConfig } from "./config.js";
 export { configSchema, defineConfig, loadConfig } from "./config.js";
 export type { DevOptions } from "./dev.js";
