@@ -68,6 +68,16 @@ export const metaAdapter: RomuAdapter = {
       });
     }
 
+    // Dynamic import() of a relative chunk means code splitting leaked into
+    // the bundle — those files won't exist next to a single-HTML playable.
+    if (/import\(\s*["']\.{0,2}\//.test(html)) {
+      issues.push({
+        severity: "error",
+        message:
+          "dynamic import of a relative chunk found — the bundle is not fully self-contained",
+      });
+    }
+
     return issues;
   },
 };

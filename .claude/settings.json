@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --enable-logging=stderr --v=0 --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/meta/playable.html)"
     ]
   }
 }

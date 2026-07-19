@@ -46,6 +46,11 @@ export async function build(options: BuildOptions): Promise<void> {
       assetsInlineLimit: Number.MAX_SAFE_INTEGER,
       cssCodeSplit: false,
       modulePreload: { polyfill: false },
+      rollupOptions: {
+        // No code splitting: dynamic import() chunks (e.g. Pixi's lazy-loaded
+        // renderers) would be separate files a single-HTML playable can't load.
+        output: { inlineDynamicImports: true },
+      },
     },
   });
 
