@@ -1,5 +1,12 @@
 # create-romu
 
+## 0.1.2
+
+### Patch Changes
+
+- 2ef26c3: Add npm metadata — keywords, homepage, and bugs links — so the packages are
+  discoverable on the registry.
+
 ## 0.1.1
 
 ### Patch Changes

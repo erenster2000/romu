@@ -1,5 +1,15 @@
 # @romujs/adapter-meta
 
+## 0.1.1
+
+### Patch Changes
+
+- 2ef26c3: Add npm metadata — keywords, homepage, and bugs links — so the packages are
+  discoverable on the registry.
+- Updated dependencies [2ef26c3]
+  - @romujs/core@0.1.1
+  - @romujs/specs@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
