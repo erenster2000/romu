@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "romu dev",
-    "build": "romu build --network meta"
+    "build": "romu build",
+    "check": "romu check"
   },
   "dependencies": {
     "@romu/sdk": "workspace:*",

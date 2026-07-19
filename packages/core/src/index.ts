@@ -12,13 +12,15 @@ export type {
   RomuPackage,
   ValidationIssue,
 } from "./adapter.js";
-export type { BuildOptions } from "./build.js";
-export { build, formatBytes } from "./build.js";
+export type { BuildOptions, NetworkResult } from "./build.js";
+export { build, check } from "./build.js";
 export type { RomuConfig } from "./config.js";
 export { configSchema, defineConfig, loadConfig } from "./config.js";
 export type { DevOptions } from "./dev.js";
 export { dev } from "./dev.js";
+export { formatBytes } from "./format.js";
 export { injectBridge, inlineHtml } from "./inline.js";
+export { lintPackage } from "./lint.js";
 
 /** Networks the installed spec registry knows about. */
 export function knownNetworks(): string[] {

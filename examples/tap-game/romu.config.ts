@@ -6,5 +6,5 @@ export default defineConfig({
     android:
       "https://play.google.com/store/apps/details?id=com.example.tapgame",
   },
-  networks: ["meta"],
+  networks: ["meta", "applovin", "levelplay"],
 });

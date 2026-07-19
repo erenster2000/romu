@@ -1,6 +1,7 @@
 /**
  * Meta (Facebook/Instagram) playable adapter.
  * Delivery: one self-contained HTML file, max 2 MB, CTA via FbPlayableAd.
+ * Generic size/self-containment checks live in core's lintPackage.
  */
 
 import type {
@@ -9,7 +10,6 @@ import type {
   RomuPackage,
   ValidationIssue,
 } from "@romu/core";
-import { formatBytes } from "@romu/core";
 import { meta } from "@romu/specs";
 
 export const metaAdapter: RomuAdapter = {
@@ -49,32 +49,16 @@ export const metaAdapter: RomuAdapter = {
   validate(pkg: RomuPackage): ValidationIssue[] {
     const issues: ValidationIssue[] = [];
     const primary = pkg.files.find((f) => f.path === pkg.primary);
-    if (!primary)
-      return [{ severity: "error", message: "missing playable.html" }];
+    if (!primary) return [];
 
-    if (primary.contents.byteLength > meta.maxSizeBytes) {
-      issues.push({
-        severity: "error",
-        message: `playable.html is ${formatBytes(primary.contents.byteLength)} — over Meta's ${formatBytes(meta.maxSizeBytes)} limit`,
-      });
-    }
-
-    const html = primary.contents.toString("utf8");
-    if (/\s(?:src|href)=["']https?:\/\//.test(html)) {
+    // Meta's review looks for the CTA call; a build without it will be rejected.
+    if (
+      !primary.contents.toString("utf8").includes("FbPlayableAd.onCTAClick")
+    ) {
       issues.push({
         severity: "error",
         message:
-          "external src/href references found — Meta requires a fully self-contained file",
-      });
-    }
-
-    // Dynamic import() of a relative chunk means code splitting leaked into
-    // the bundle — those files won't exist next to a single-HTML playable.
-    if (/import\(\s*["']\.{0,2}\//.test(html)) {
-      issues.push({
-        severity: "error",
-        message:
-          "dynamic import of a relative chunk found — the bundle is not fully self-contained",
+          "FbPlayableAd.onCTAClick not found — Meta rejects playables without it",
       });
     }
 

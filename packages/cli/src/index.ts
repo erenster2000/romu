@@ -4,12 +4,18 @@
  * nicely. Anything smarter than that belongs in core.
  */
 
+import { applovinAdapter } from "@romu/adapter-applovin";
+import { levelplayAdapter } from "@romu/adapter-levelplay";
 import { metaAdapter } from "@romu/adapter-meta";
-import { build, dev, knownNetworks, type RomuAdapter } from "@romu/core";
+import { build, check, dev, knownNetworks, type RomuAdapter } from "@romu/core";
 import { Command } from "commander";
 
-/** Adapters that ship with the CLI. Phase 2 makes this list configurable. */
-const builtinAdapters: RomuAdapter[] = [metaAdapter];
+/** Adapters that ship with the CLI. */
+const builtinAdapters: RomuAdapter[] = [
+  metaAdapter,
+  applovinAdapter,
+  levelplayAdapter,
+];
 
 const program = new Command();
 
@@ -33,6 +39,15 @@ program
     await run(() =>
       build({ network: options.network, adapters: builtinAdapters }),
     );
+  });
+
+program
+  .command("check")
+  .description("Validate every configured network without writing dist/")
+  .action(async () => {
+    await run(async () => {
+      await check({ adapters: builtinAdapters });
+    });
   });
 
 program

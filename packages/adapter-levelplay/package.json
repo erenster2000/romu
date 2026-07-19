@@ -1,0 +1,29 @@
+{
+  "name": "@romu/adapter-levelplay",
+  "version": "0.0.0",
+  "description": "Romu adapter for Unity LevelPlay (ironSource) playable ads (dapi)",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/adapter-levelplay"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@romu/core": "workspace:*",
+    "@romu/specs": "workspace:*"
+  }
+}

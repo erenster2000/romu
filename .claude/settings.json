@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(git commit -m ' *)",
-      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --enable-logging=stderr --v=0 --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/meta/playable.html)"
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --enable-logging=stderr --v=0 --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/meta/playable.html)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://api.github.com/repos/erenster2000/romu\")",
+      "WebSearch",
+      "WebFetch(domain:developers.is.com)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/applovin/playable.html)"
     ]
   }
 }

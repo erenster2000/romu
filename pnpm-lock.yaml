@@ -46,6 +46,24 @@ importers:
         specifier: ^5.9.0
         version: 5.9.3
 
+  packages/adapter-applovin:
+    dependencies:
+      '@romu/core':
+        specifier: workspace:*
+        version: link:../core
+      '@romu/specs':
+        specifier: workspace:*
+        version: link:../specs
+
+  packages/adapter-levelplay:
+    dependencies:
+      '@romu/core':
+        specifier: workspace:*
+        version: link:../core
+      '@romu/specs':
+        specifier: workspace:*
+        version: link:../specs
+
   packages/adapter-meta:
     dependencies:
       '@romu/core':
@@ -57,6 +75,12 @@ importers:
 
   packages/cli:
     dependencies:
+      '@romu/adapter-applovin':
+        specifier: workspace:*
+        version: link:../adapter-applovin
+      '@romu/adapter-levelplay':
+        specifier: workspace:*
+        version: link:../adapter-levelplay
       '@romu/adapter-meta':
         specifier: workspace:*
         version: link:../adapter-meta

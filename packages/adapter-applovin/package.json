@@ -1,0 +1,29 @@
+{
+  "name": "@romu/adapter-applovin",
+  "version": "0.0.0",
+  "description": "Romu adapter for AppLovin playable ads (MRAID)",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/adapter-applovin"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@romu/core": "workspace:*",
+    "@romu/specs": "workspace:*"
+  }
+}
