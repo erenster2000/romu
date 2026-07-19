@@ -10,7 +10,7 @@
     "directory": "packages/cli"
   },
   "bin": {
-    "romu": "./dist/index.js"
+    "romu": "./bin/romu.js"
   },
   "exports": {
     "./config": {
@@ -19,6 +19,7 @@
     }
   },
   "files": [
+    "bin",
     "dist"
   ],
   "scripts": {
