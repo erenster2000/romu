@@ -1,5 +1,12 @@
 # tap-game-example
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [d937129]
+  - @romujs/sdk@0.2.0
+
 ## 0.0.2
 
 ### Patch Changes
