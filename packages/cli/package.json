@@ -32,5 +32,18 @@
     "@romujs/adapter-meta": "workspace:*",
     "@romujs/core": "workspace:*",
     "commander": "^14.0.0"
-  }
+  },
+  "keywords": [
+    "playable-ads",
+    "playable",
+    "html5-games",
+    "advertising",
+    "ad-networks",
+    "cli",
+    "build-tool",
+    "pixijs",
+    "mraid"
+  ],
+  "homepage": "https://github.com/erenster2000/romu#readme",
+  "bugs": "https://github.com/erenster2000/romu/issues"
 }

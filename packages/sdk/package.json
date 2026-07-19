@@ -21,5 +21,17 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run --passWithNoTests"
-  }
+  },
+  "keywords": [
+    "playable-ads",
+    "playable",
+    "html5-games",
+    "advertising",
+    "ad-networks",
+    "sdk",
+    "mraid",
+    "dapi"
+  ],
+  "homepage": "https://github.com/erenster2000/romu#readme",
+  "bugs": "https://github.com/erenster2000/romu/issues"
 }

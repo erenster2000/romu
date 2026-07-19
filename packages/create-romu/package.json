@@ -24,5 +24,17 @@
   "dependencies": {
     "@clack/prompts": "^0.11.0",
     "picocolors": "^1.1.0"
-  }
+  },
+  "keywords": [
+    "playable-ads",
+    "playable",
+    "html5-games",
+    "advertising",
+    "ad-networks",
+    "scaffold",
+    "template",
+    "pixijs"
+  ],
+  "homepage": "https://github.com/erenster2000/romu#readme",
+  "bugs": "https://github.com/erenster2000/romu/issues"
 }

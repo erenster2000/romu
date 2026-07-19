@@ -25,5 +25,17 @@
   "dependencies": {
     "@romujs/core": "workspace:*",
     "@romujs/specs": "workspace:*"
-  }
+  },
+  "keywords": [
+    "playable-ads",
+    "playable",
+    "html5-games",
+    "advertising",
+    "ad-networks",
+    "meta",
+    "facebook",
+    "instagram"
+  ],
+  "homepage": "https://github.com/erenster2000/romu#readme",
+  "bugs": "https://github.com/erenster2000/romu/issues"
 }

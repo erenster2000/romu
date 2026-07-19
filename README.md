@@ -4,6 +4,8 @@
 > Write your game once — ship spec-compliant builds for every ad network.
 
 [![CI](https://github.com/erenster2000/romu/actions/workflows/ci.yml/badge.svg)](https://github.com/erenster2000/romu/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/romujs?label=romujs)](https://www.npmjs.com/package/romujs)
+[![npm](https://img.shields.io/npm/v/create-romu?label=create-romu)](https://www.npmjs.com/package/create-romu)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Status: public alpha.** The core thread works end to end; APIs may still move.
