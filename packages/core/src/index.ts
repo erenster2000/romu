@@ -12,6 +12,8 @@ export type {
   RomuPackage,
   ValidationIssue,
 } from "./adapter.js";
+export type { AssetEntry, AssetReport } from "./assets.js";
+export { romuAssetsPlugin } from "./assets.js";
 export type { BuildOptions, NetworkResult } from "./build.js";
 export { build, check } from "./build.js";
 export type { RomuConfig } from "./config.js";

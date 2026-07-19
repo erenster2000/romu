@@ -7,7 +7,14 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://api.github.com/repos/erenster2000/romu\")",
       "WebSearch",
       "WebFetch(domain:developers.is.com)",
-      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/applovin/playable.html)"
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --virtual-time-budget=6000 --dump-dom file:///Users/labut/Projects/romu/examples/tap-game/dist/applovin/playable.html)",
+      "Bash(curl -s \"https://api.github.com/repos/erenster2000/romu/actions/runs?per_page=4\")",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter \"sed '/^Co-Authored-By: Claude/d'\" -- --all)",
+      "Bash(curl -s -L \"https://p.applov.in/playablePreview?create=1\" -o /private/tmp/claude-501/-Users-labut-Projects-romu/4bef879b-0fc4-4474-8ca6-ba451cb7b07a/scratchpad/applovin-preview.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s -X POST \"https://p.applov.in/validateHTMLContent\" -H \"Content-Type: text/html\" --data-binary @dist/applovin/playable.html)",
+      "Bash(python3 -m json.tool)",
+      "Bash(grep -oE \".{0,120}playableWarning.{0,400}\" /private/tmp/claude-501/-Users-labut-Projects-romu/4bef879b-0fc4-4474-8ca6-ba451cb7b07a/scratchpad/applovin-preview.html)",
+      "Bash(curl -s -X POST \"https://p.applov.in/getCachedAdURL\" -H \"Content-Type: text/html\" --data-binary @dist/applovin/playable.html)"
     ]
   }
 }

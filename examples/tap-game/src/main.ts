@@ -1,11 +1,20 @@
 /**
  * The walking-skeleton example: a tiny tap-the-target playable that exercises
- * the whole Romu thread — onReady() to start, cta() from the end card.
- * Everything is drawn in code so the naive phase-1 build has no assets to carry.
+ * the whole Romu thread — onReady() to start, cta() from the end card, and
+ * real image assets flowing through the asset pipeline as inlined WebP.
  */
 
 import { cta, onReady } from "@romu/sdk";
-import { Application, Container, Graphics, Text } from "pixi.js";
+import {
+  Application,
+  Assets,
+  Container,
+  Graphics,
+  Sprite,
+  Text,
+} from "pixi.js";
+import bgUrl from "../assets/images/bg.png";
+import logoUrl from "../assets/images/logo.png";
 
 const TAPS_TO_WIN = 5;
 
@@ -13,6 +22,27 @@ async function start(): Promise<void> {
   const app = new Application();
   await app.init({ resizeTo: window, background: "#1a1a2e", antialias: true });
   document.body.appendChild(app.canvas);
+
+  const [bgTexture, logoTexture] = await Promise.all([
+    Assets.load(bgUrl),
+    Assets.load(logoUrl),
+  ]);
+
+  const background = new Sprite(bgTexture);
+  app.stage.addChild(background);
+  const layoutBackground = (): void => {
+    const scale = Math.max(
+      app.screen.width / bgTexture.width,
+      app.screen.height / bgTexture.height,
+    );
+    background.scale.set(scale);
+    background.position.set(
+      (app.screen.width - bgTexture.width * scale) / 2,
+      (app.screen.height - bgTexture.height * scale) / 2,
+    );
+  };
+  layoutBackground();
+  app.renderer.on("resize", layoutBackground);
 
   let score = 0;
 
@@ -60,12 +90,19 @@ async function start(): Promise<void> {
       .fill({ color: "#000000", alpha: 0.7 });
     card.addChild(backdrop);
 
+    const logo = new Sprite(logoTexture);
+    logo.anchor.set(0.5);
+    logo.width = 140;
+    logo.height = 140;
+    logo.position.set(app.screen.width / 2, app.screen.height / 2 - 160);
+    card.addChild(logo);
+
     const title = new Text({
       text: "You win!",
       style: { fill: "#ffffff", fontSize: 48, fontFamily: "sans-serif" },
     });
     title.anchor.set(0.5);
-    title.position.set(app.screen.width / 2, app.screen.height / 2 - 70);
+    title.position.set(app.screen.width / 2, app.screen.height / 2 - 40);
     card.addChild(title);
 
     const button = new Container();
@@ -76,7 +113,7 @@ async function start(): Promise<void> {
     });
     label.anchor.set(0.5);
     button.addChild(bg, label);
-    button.position.set(app.screen.width / 2, app.screen.height / 2 + 40);
+    button.position.set(app.screen.width / 2, app.screen.height / 2 + 60);
     button.eventMode = "static";
     button.cursor = "pointer";
     button.on("pointerdown", () => cta());

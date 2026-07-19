@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { build as viteBuild } from "vite";
+import { type Rollup, build as viteBuild } from "vite";
 import type { RomuAdapter, RomuPackage, ValidationIssue } from "./adapter.js";
+import { type AssetReport, romuAssetsPlugin } from "./assets.js";
 import { loadConfig, type RomuConfig } from "./config.js";
 import { formatBytes } from "./format.js";
 import { injectBridge, inlineHtml } from "./inline.js";
@@ -97,14 +98,26 @@ async function packageAll(
   });
 }
 
+interface CodeBreakdown {
+  engineBytes: number;
+  depsBytes: number;
+  gameBytes: number;
+}
+
+const ASSET_MODULE =
+  /\.(png|jpe?g|webp|avif|gif|svg|mp3|m4a|aac|ogg|wav|woff2?|ttf|otf)$/i;
+
 /** One Vite build of the user's game, folded into a single HTML string. */
 async function bundleGame(cwd: string): Promise<string> {
   const viteOut = path.join(cwd, ".romu", "vite");
-  await viteBuild({
+  const assetReport: AssetReport = { entries: [] };
+
+  const result = (await viteBuild({
     root: cwd,
     configFile: false,
     logLevel: "warn",
     base: "./",
+    plugins: [romuAssetsPlugin(assetReport, cwd)],
     build: {
       outDir: viteOut,
       emptyOutDir: true,
@@ -120,13 +133,88 @@ async function bundleGame(cwd: string): Promise<string> {
         output: { inlineDynamicImports: true },
       },
     },
-  });
+  })) as Rollup.RollupOutput;
+
+  printBundleReport(codeBreakdown(result), assetReport);
 
   const rawHtml = await readFile(path.join(viteOut, "index.html"), "utf8");
   // build.base is "./", so asset refs are relative to the output root
   return inlineHtml(rawHtml, (assetPath) =>
     readFileSync(path.join(viteOut, assetPath), "utf8"),
   );
+}
+
+/**
+ * Splits the JS bundle by origin using Rollup's per-module render sizes,
+ * scaled to the minified output so the numbers roughly add up to reality.
+ */
+function codeBreakdown(result: Rollup.RollupOutput): CodeBreakdown {
+  const chunk = result.output.find(
+    (o): o is Rollup.OutputChunk => o.type === "chunk",
+  );
+  if (!chunk) return { engineBytes: 0, depsBytes: 0, gameBytes: 0 };
+
+  let engine = 0;
+  let deps = 0;
+  let game = 0;
+  for (const [id, mod] of Object.entries(chunk.modules)) {
+    const size = mod.renderedLength;
+    if (ASSET_MODULE.test(id.split("?")[0] ?? id)) continue; // reported as assets
+    if (id.includes("node_modules")) {
+      if (id.includes("/pixi.js/")) engine += size;
+      else deps += size;
+    } else if (id.startsWith("\0")) {
+      deps += size;
+    } else {
+      game += size;
+    }
+  }
+
+  const rendered = engine + deps + game;
+  if (rendered === 0) return { engineBytes: 0, depsBytes: 0, gameBytes: 0 };
+  // scale pre-minify module sizes down to the final minified chunk size
+  const assetBytes = Object.entries(chunk.modules)
+    .filter(([id]) => ASSET_MODULE.test(id.split("?")[0] ?? id))
+    .reduce((sum, [, mod]) => sum + mod.renderedLength, 0);
+  const scale = Math.max(chunk.code.length - assetBytes, 0) / rendered;
+  return {
+    engineBytes: Math.round(engine * scale),
+    depsBytes: Math.round(deps * scale),
+    gameBytes: Math.round(game * scale),
+  };
+}
+
+function printBundleReport(code: CodeBreakdown, assets: AssetReport): void {
+  console.log("  bundle breakdown (approx, minified):");
+  console.log(`    engine (pixi.js)  ${formatBytes(code.engineBytes)}`);
+  if (code.depsBytes > 0) {
+    console.log(`    dependencies      ${formatBytes(code.depsBytes)}`);
+  }
+  console.log(`    game code         ${formatBytes(code.gameBytes)}`);
+
+  if (assets.entries.length > 0) {
+    const sorted = [...assets.entries].sort(
+      (a, b) => b.encodedBytes - a.encodedBytes,
+    );
+    const top = sorted.slice(0, 5);
+    console.log(`    assets (${assets.entries.length}):`);
+    for (const entry of top) {
+      const conversion = entry.convertedTo
+        ? ` → ${entry.convertedTo} (was ${formatBytes(entry.originalBytes)})`
+        : "";
+      console.log(
+        `      ${entry.file}  ${formatBytes(entry.encodedBytes)} inlined${conversion}`,
+      );
+    }
+    if (sorted.length > top.length) {
+      console.log(`      …and ${sorted.length - top.length} more`);
+    }
+    for (const entry of assets.entries) {
+      if (entry.warning) {
+        console.log(`      warning: ${entry.file} — ${entry.warning}`);
+      }
+    }
+  }
 }
 
 function packageFor(
