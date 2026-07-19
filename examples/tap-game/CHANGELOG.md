@@ -1,5 +1,13 @@
 # tap-game-example
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [0b1510e]
+- Updated dependencies [be6188b]
+  - @romujs/pixi@0.1.0
+
 ## 0.0.3
 
 ### Patch Changes

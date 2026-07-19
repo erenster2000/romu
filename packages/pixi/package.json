@@ -1,6 +1,6 @@
 {
   "name": "@romujs/pixi",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Romu's Pixi.js game layer: flow machine, scenes, playable components",
   "type": "module",
   "license": "MIT",
