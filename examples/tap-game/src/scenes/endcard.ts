@@ -3,7 +3,7 @@ import { cta } from "@romujs/sdk";
 import { Assets, Container, Graphics, Sprite, Text } from "pixi.js";
 import logoUrl from "../../assets/images/logo.png";
 
-export const endcard = scene(({ app, stage, on }) => {
+export const endcard = scene(({ stage, on }) => {
   const backdrop = new Graphics();
   stage.addChild(backdrop);
 

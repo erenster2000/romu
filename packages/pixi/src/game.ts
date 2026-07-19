@@ -63,10 +63,10 @@ async function boot(options: GameOptions): Promise<void> {
     context: {
       app,
       on(event, callback) {
-        let set = listeners.get(event);
-        if (!set) listeners.set(event, (set = new Set()));
+        const set = listeners.get(event) ?? new Set();
+        listeners.set(event, set);
         set.add(callback);
-        return () => set?.delete(callback);
+        return () => set.delete(callback);
       },
     },
   });
