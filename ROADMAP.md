@@ -43,8 +43,8 @@ from PDFs.
 ### Phase 3 — Asset pipeline *(~2 weeks)*
 WebP conversion via sharp, audio compression, real base64 inlining; a size budget
 report showing per-asset cost with the engine as its own line item.
-**Done when:** the example game fits under Meta's 2 MB limit and the report says
-who costs how many KB.
+**Done when:** the example game fits comfortably under every configured network's
+size limit and the report says who costs how many KB.
 
 ### Phase 4 — DX polish and release → v1 🚀 *(~2 weeks)*
 `create-romu` (interactive clack prompts) + one Pixi template; README + VitePress
@@ -75,6 +75,6 @@ phases 7–8 bring new users (growth) — harden the product first, then widen i
 
 | Decision | Rationale |
 |---|---|
-| First adapter: **Meta** | Most-requested network; its 2 MB limit is the harshest, so passing it first de-risks everything after |
+| First adapter: **Meta** | Most-requested network with the strictest content rules (single file, no external calls, no mraid), so passing it first de-risks everything after |
 | Game layer is **post-v1** | v1 users write vanilla Pixi + our SDK; Romu's core value is the publish side |
 | Release v1 as **0.1.0 public alpha** | Honest signal: usable, APIs may still move |

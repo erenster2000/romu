@@ -16,7 +16,7 @@ it**. Every ad network has its own rules, and they are incompatible with each ot
 
 | Network | Package format | Size limit | CTA call |
 |---|---|---|---|
-| Meta (Facebook) | Single HTML | 2 MB | `FbPlayableAd.onCTAClick()` |
+| Meta (Facebook) | Single HTML | 5 MB | `FbPlayableAd.onCTAClick()` |
 | Google Ads | ZIP | 5 MB | `ExitApi.exit()` |
 | AppLovin | Single HTML | 5 MB | `mraid.open(url)` |
 | Unity LevelPlay (ironSource) | Single HTML | 5 MB | `dapi.openStoreUrl()` |
@@ -92,7 +92,7 @@ and frontend developers building for UA (user acquisition) teams.
 - Compression level can auto-adjust to the network's limit
 
 ### 6. Engine size discipline
-- Game + engine must fit together inside a 2 MB limit
+- Game + engine must fit together inside the network size limits
 - Aggressive tree-shaking, bundling only the Pixi modules actually used,
   a lightweight tween alternative (not being locked into GSAP)
 

@@ -1,6 +1,6 @@
 /**
  * Meta (Facebook/Instagram) playable adapter.
- * Delivery: one self-contained HTML file, max 2 MB, CTA via FbPlayableAd.
+ * Delivery: one self-contained HTML file, max 5 MB, CTA via FbPlayableAd.
  * Generic size/self-containment checks live in core's lintPackage.
  */
 
@@ -51,14 +51,15 @@ export const metaAdapter: RomuAdapter = {
     const primary = pkg.files.find((f) => f.path === pkg.primary);
     if (!primary) return [];
 
-    // Meta's review looks for the CTA call; a build without it will be rejected.
+    // Meta marks the CTA call "strongly recommended" rather than required,
+    // so its absence is a warning, not a build failure.
     if (
       !primary.contents.toString("utf8").includes("FbPlayableAd.onCTAClick")
     ) {
       issues.push({
-        severity: "error",
+        severity: "warning",
         message:
-          "FbPlayableAd.onCTAClick not found — Meta rejects playables without it",
+          "FbPlayableAd.onCTAClick not found — Meta strongly recommends it",
       });
     }
 

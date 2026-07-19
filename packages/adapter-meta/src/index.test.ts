@@ -19,10 +19,11 @@ describe("metaAdapter", () => {
     expect(bridge).toContain("FbPlayableAd.onCTAClick");
   });
 
-  it("fails builds missing the CTA call", () => {
+  it("warns (not errors) when the CTA call is missing", () => {
     const pkg = metaAdapter.package({ html: "<html>no bridge here</html>" });
     const issues = metaAdapter.validate(pkg);
-    expect(issues.some((i) => i.message.includes("onCTAClick"))).toBe(true);
+    const cta = issues.find((i) => i.message.includes("onCTAClick"));
+    expect(cta?.severity).toBe("warning");
   });
 
   it("accepts builds carrying the bridge", () => {

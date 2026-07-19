@@ -11,13 +11,8 @@ describe("spec registry", () => {
     }
   });
 
-  it("meta requires a single HTML file under 2 MB", () => {
-    expect(meta.packageFormat).toBe("single-html");
-    expect(meta.maxSizeBytes).toBe(2 * 1024 * 1024);
-  });
-
-  it("applovin and levelplay allow 5 MB single HTML", () => {
-    for (const spec of [applovin, levelplay]) {
+  it("all three networks currently allow 5 MB single HTML", () => {
+    for (const spec of [meta, applovin, levelplay]) {
       expect(spec.packageFormat).toBe("single-html");
       expect(spec.maxSizeBytes).toBe(5 * 1024 * 1024);
     }

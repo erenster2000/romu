@@ -33,12 +33,16 @@ export const meta: NetworkSpec = {
   network: "meta",
   displayName: "Meta (Facebook/Instagram)",
   packageFormat: "single-html",
-  maxSizeBytes: 2 * 1024 * 1024,
+  // Was 2 MB for years (many guides still say so); Meta's help page now says 5 MB.
+  maxSizeBytes: 5 * 1024 * 1024,
   ctaApi: "FbPlayableAd.onCTAClick()",
   notes: [
-    "All assets must be embedded as data URIs; HTTP requests are forbidden",
-    "All aspect ratios supported (landscape, square, vertical); design responsively",
-    "Missing FbPlayableAd.onCTAClick() is a common rejection reason",
+    "A ZIP ending in index.html is also accepted; Romu ships the single-HTML form",
+    "All assets must be embedded as data URIs; external network calls (e.g. XMLHttpRequest) are forbidden",
+    "Must work without mraid.js or similar frameworks",
+    "Build vertically and stay responsive across resolutions",
+    "FbPlayableAd.onCTAClick() is strongly recommended (not strictly required)",
+    "JavaScript redirects are not allowed",
   ],
   sources: [
     {
