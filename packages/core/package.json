@@ -1,0 +1,28 @@
+{
+  "name": "@romu/core",
+  "version": "0.0.0",
+  "description": "Romu's engine: build pipeline, dev server, asset pipeline, adapter runner",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/core"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@romu/specs": "workspace:*"
+  }
+}

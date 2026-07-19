@@ -1,0 +1,26 @@
+{
+  "name": "romu",
+  "version": "0.0.0",
+  "description": "The open-source framework for building playable ads",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erenster2000/romu.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "romu": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --clean",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@romu/core": "workspace:*",
+    "commander": "^14.0.0"
+  }
+}
