@@ -4,5 +4,5 @@
  *   import { defineConfig } from "romu/config";
  */
 
-export type { RomuConfig } from "@romu/core";
-export { defineConfig } from "@romu/core";
+export type { RomuConfig } from "@romujs/core";
+export { defineConfig } from "@romujs/core";

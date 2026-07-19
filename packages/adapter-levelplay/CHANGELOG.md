@@ -1,4 +1,4 @@
-# @romu/adapter-levelplay
+# @romujs/adapter-levelplay
 
 ## 0.1.0
 
@@ -13,5 +13,5 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @romu/core@0.1.0
-  - @romu/specs@0.1.0
+  - @romujs/core@0.1.0
+  - @romujs/specs@0.1.0

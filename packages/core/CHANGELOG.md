@@ -1,4 +1,4 @@
-# @romu/core
+# @romujs/core
 
 ## 0.1.0
 
@@ -13,4 +13,4 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @romu/specs@0.1.0
+  - @romujs/specs@0.1.0

@@ -1,4 +1,4 @@
-import type { NetworkSpec } from "@romu/specs";
+import type { NetworkSpec } from "@romujs/specs";
 import type { RomuConfig } from "./config.js";
 
 /** What the core build hands to an adapter: the fully inlined single HTML. */

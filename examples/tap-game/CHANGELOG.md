@@ -5,4 +5,4 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @romu/sdk@0.1.0
+  - @romujs/sdk@0.1.0

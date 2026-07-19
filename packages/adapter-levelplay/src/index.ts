@@ -9,8 +9,8 @@ import type {
   RomuAdapter,
   RomuPackage,
   ValidationIssue,
-} from "@romu/core";
-import { levelplay } from "@romu/specs";
+} from "@romujs/core";
+import { levelplay } from "@romujs/specs";
 
 export const levelplayAdapter: RomuAdapter = {
   name: "levelplay",

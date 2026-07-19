@@ -8,11 +8,11 @@ supply what is truly network-specific.
 ## The contract
 
 ```ts
-import type { RomuAdapter } from "@romu/core";
+import type { RomuAdapter } from "@romujs/core";
 
 export const myAdapter: RomuAdapter = {
   name: "mynetwork",          // id used in romu.config.ts
-  spec,                       // the @romu/specs entry (add one if missing)
+  spec,                       // the @romujs/specs entry (add one if missing)
   bridge(config) { ... },     // returns the injected bridge script
   package(build) { ... },     // wraps the HTML into the delivery format
   validate(pkg) { ... },      // network-specific extra checks
@@ -21,7 +21,7 @@ export const myAdapter: RomuAdapter = {
 
 ## 1. Add a spec entry
 
-Every value in `@romu/specs` must carry a **source URL and retrieval date** —
+Every value in `@romujs/specs` must carry a **source URL and retrieval date** —
 networks change their requirements silently, and the registry is only useful
 if every entry is re-verifiable:
 

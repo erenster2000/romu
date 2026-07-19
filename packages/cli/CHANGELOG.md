@@ -13,7 +13,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @romu/core@0.1.0
-  - @romu/adapter-meta@0.1.0
-  - @romu/adapter-applovin@0.1.0
-  - @romu/adapter-levelplay@0.1.0
+  - @romujs/core@0.1.0
+  - @romujs/adapter-meta@0.1.0
+  - @romujs/adapter-applovin@0.1.0
+  - @romujs/adapter-levelplay@0.1.0

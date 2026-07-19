@@ -11,8 +11,8 @@ import type {
   RomuConfig,
   RomuPackage,
   ValidationIssue,
-} from "@romu/core";
-import { applovin } from "@romu/specs";
+} from "@romujs/core";
+import { applovin } from "@romujs/specs";
 
 export const applovinAdapter: RomuAdapter = {
   name: "applovin",

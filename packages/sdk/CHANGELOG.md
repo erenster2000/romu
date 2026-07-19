@@ -1,4 +1,4 @@
-# @romu/sdk
+# @romujs/sdk
 
 ## 0.1.0
 

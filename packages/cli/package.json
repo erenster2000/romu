@@ -27,10 +27,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@romu/adapter-applovin": "workspace:*",
-    "@romu/adapter-levelplay": "workspace:*",
-    "@romu/adapter-meta": "workspace:*",
-    "@romu/core": "workspace:*",
+    "@romujs/adapter-applovin": "workspace:*",
+    "@romujs/adapter-levelplay": "workspace:*",
+    "@romujs/adapter-meta": "workspace:*",
+    "@romujs/core": "workspace:*",
     "commander": "^14.0.0"
   }
 }

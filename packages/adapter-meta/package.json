@@ -1,5 +1,5 @@
 {
-  "name": "@romu/adapter-meta",
+  "name": "@romujs/adapter-meta",
   "version": "0.1.0",
   "description": "Romu adapter for Meta (Facebook/Instagram) playable ads",
   "type": "module",
@@ -23,7 +23,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@romu/core": "workspace:*",
-    "@romu/specs": "workspace:*"
+    "@romujs/core": "workspace:*",
+    "@romujs/specs": "workspace:*"
   }
 }

@@ -1,4 +1,4 @@
-import type { NetworkSpec } from "@romu/specs";
+import type { NetworkSpec } from "@romujs/specs";
 import { describe, expect, it } from "vitest";
 import type { RomuPackage } from "./adapter.js";
 import { lintPackage } from "./lint.js";

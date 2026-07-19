@@ -1,5 +1,5 @@
 {
-  "name": "@romu/sdk",
+  "name": "@romujs/sdk",
   "version": "0.1.0",
   "description": "The unified playable ad SDK — one API, every ad network",
   "type": "module",

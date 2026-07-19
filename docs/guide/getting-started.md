@@ -23,7 +23,7 @@ shows a toast instead of opening a store.
 Two functions make your game network-ready:
 
 ```ts
-import { cta, onReady } from "@romu/sdk";
+import { cta, onReady } from "@romujs/sdk";
 
 onReady(() => {
   // the ad container says the playable may start

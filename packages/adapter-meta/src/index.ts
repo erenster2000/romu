@@ -9,8 +9,8 @@ import type {
   RomuAdapter,
   RomuPackage,
   ValidationIssue,
-} from "@romu/core";
-import { meta } from "@romu/specs";
+} from "@romujs/core";
+import { meta } from "@romujs/specs";
 
 export const metaAdapter: RomuAdapter = {
   name: "meta",

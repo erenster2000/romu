@@ -3,7 +3,7 @@
 How the pieces fit together. Three load-bearing ideas:
 
 1. **Thin CLI / thick core** — the CLI is terminal UX only; everything real is a
-   function in `@romu/core`.
+   function in `@romujs/core`.
 2. **The bridge pattern** — the SDK never knows about networks; each adapter
    injects a tiny bridge script at build time.
 3. **A four-member adapter contract** — adding a network = filling in four members.
@@ -53,7 +53,7 @@ romu.config.ts ──► [1] load config, validate with zod
                         │     • inline everything into ONE HTML via base64
                         │
                    [4] validation: spec linter + size budget report
-                        │     (against Meta's rules from @romu/specs)
+                        │     (against Meta's rules from @romujs/specs)
                         ▼
                    dist/meta/playable.html   ✅ ready to publish
 ```
@@ -75,7 +75,7 @@ How does `cta()` end up calling Meta's code in a Meta build? Two options existed
 Three small pieces:
 
 ```ts
-// @romu/sdk — what users import. Knows NOTHING about networks:
+// @romujs/sdk — what users import. Knows NOTHING about networks:
 export function cta() {
   window.__ROMU_BRIDGE__.cta();      // just talks to the bridge
 }
@@ -106,7 +106,7 @@ What an adapter **must** provide:
 ```ts
 interface RomuAdapter {
   name: string;                         // "meta"
-  spec: NetworkSpec;                    // from @romu/specs: limit, format, bans
+  spec: NetworkSpec;                    // from @romujs/specs: limit, format, bans
   bridge(config: RomuConfig): string;   // produces the bridge script above
   package(build: BuildOutput): Package; // single HTML or ZIP — builds the package
   validate(pkg: Package): Issue[];      // network-specific extra checks

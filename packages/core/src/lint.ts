@@ -1,4 +1,4 @@
-import type { NetworkSpec } from "@romu/specs";
+import type { NetworkSpec } from "@romujs/specs";
 import type { RomuPackage, ValidationIssue } from "./adapter.js";
 import { formatBytes } from "./format.js";
 

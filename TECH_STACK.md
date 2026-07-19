@@ -2,16 +2,16 @@
 
 Decisions locked for building the Romu monorepo. This covers the tools **we** use to
 develop Romu; end users only need Node and the package manager of their choice
-(`npm`/`yarn`/`pnpm`/`bun`) — published `@romu/*` packages are consumable by any of them.
+(`npm`/`yarn`/`pnpm`/`bun`) — published `@romujs/*` packages are consumable by any of them.
 
 ## Overview
 
 | Area | Choice | Role |
 |---|---|---|
 | Language | **TypeScript** (strict) | Everything is typed; published types power user DX |
-| Package manager / workspace | **pnpm workspaces** | Links `@romu/*` packages to each other during development |
+| Package manager / workspace | **pnpm workspaces** | Links `@romujs/*` packages to each other during development |
 | Task runner | **Turborepo** | Builds packages in dependency order, caches unchanged ones |
-| Library bundler | **tsup** | Compiles `@romu/*` packages to publish-ready ESM + `.d.ts` |
+| Library bundler | **tsup** | Compiles `@romujs/*` packages to publish-ready ESM + `.d.ts` |
 | Build & dev engine | **Vite** (programmatic API) | Powers `romu dev` (HMR server) and `romu build` (bundling) |
 | CLI | **commander** + **@clack/prompts** | Command/flag parsing + interactive scaffolding prompts |
 | Config validation | **zod** | Validates `romu.config.ts` with human-friendly errors |
@@ -36,7 +36,7 @@ protocol links local packages without publishing; strict dependency resolution
 prevents "accidentally works on my machine, breaks for users" phantom dependencies.
 
 ### Turborepo
-Solves task ordering ("build `@romu/sdk` before `@romu/cli`") and caching ("only one
+Solves task ordering ("build `@romujs/sdk` before `@romujs/cli`") and caching ("only one
 package changed — rebuild that one, restore the rest from cache"). Chosen over Nx for
 its near-zero learning curve: one `turbo.json`.
 

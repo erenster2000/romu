@@ -1,4 +1,4 @@
-# @romu/specs
+# @romujs/specs
 
 ## 0.1.0
 

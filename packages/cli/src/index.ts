@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 /**
- * The `romu` command. Thin by design: parse arguments, call @romu/core, print
+ * The `romu` command. Thin by design: parse arguments, call @romujs/core, print
  * nicely. Anything smarter than that belongs in core.
  */
 
 import { createRequire } from "node:module";
-import { applovinAdapter } from "@romu/adapter-applovin";
-import { levelplayAdapter } from "@romu/adapter-levelplay";
-import { metaAdapter } from "@romu/adapter-meta";
-import { build, check, dev, knownNetworks, type RomuAdapter } from "@romu/core";
+import { applovinAdapter } from "@romujs/adapter-applovin";
+import { levelplayAdapter } from "@romujs/adapter-levelplay";
+import { metaAdapter } from "@romujs/adapter-meta";
+import {
+  build,
+  check,
+  dev,
+  knownNetworks,
+  type RomuAdapter,
+} from "@romujs/core";
 import { Command } from "commander";
 
 const { version } = createRequire(import.meta.url)("../package.json") as {

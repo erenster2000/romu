@@ -1,5 +1,5 @@
 {
-  "name": "@romu/core",
+  "name": "@romujs/core",
   "version": "0.1.0",
   "description": "Romu's engine: build pipeline, dev server, asset pipeline, adapter runner",
   "type": "module",
@@ -23,7 +23,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@romu/specs": "workspace:*",
+    "@romujs/specs": "workspace:*",
     "esbuild": "^0.28.0",
     "sharp": "^0.34.0",
     "vite": "^7.0.0",

@@ -1,7 +1,7 @@
 /**
  * Your playable starts here.
  *
- * The two imports from @romu/sdk are all you need to be network-ready:
+ * The two imports from @romujs/sdk are all you need to be network-ready:
  *  - onReady(cb): the ad container says the playable may start
  *  - cta(): send the player to the app store, however the network wants it
  *
@@ -9,7 +9,7 @@
  * and compressed by Romu's asset pipeline automatically.
  */
 
-import { cta, onReady } from "@romu/sdk";
+import { cta, onReady } from "@romujs/sdk";
 import { Application, Container, Graphics, Text } from "pixi.js";
 
 const TAPS_TO_WIN = 5;

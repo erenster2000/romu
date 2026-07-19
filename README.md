@@ -41,7 +41,7 @@ levelplay  dist/levelplay/playable.html  588.5 KB / 5.00 MB (11%)
 Game code imports one SDK and never learns which network it runs on:
 
 ```ts
-import { cta, onReady } from "@romu/sdk";
+import { cta, onReady } from "@romujs/sdk";
 
 onReady(() => startGame());
 downloadButton.on("pointerdown", () => cta());
@@ -59,12 +59,12 @@ limits, forbidden APIs, packaging rules. See [ARCHITECTURE.md](ARCHITECTURE.md).
 |---|---|
 | `romu` | The CLI: `romu dev`, `romu build`, `romu check` |
 | `create-romu` | Project scaffolding — `npm create romu` |
-| `@romu/sdk` | The unified SDK game code imports |
-| `@romu/core` | Build pipeline, dev server, asset pipeline, adapter runner |
-| `@romu/specs` | Machine-readable, dated, sourced network specs |
-| `@romu/adapter-meta` | Meta (Facebook/Instagram) |
-| `@romu/adapter-applovin` | AppLovin (MRAID v2) |
-| `@romu/adapter-levelplay` | Unity LevelPlay / ironSource (dapi) |
+| `@romujs/sdk` | The unified SDK game code imports |
+| `@romujs/core` | Build pipeline, dev server, asset pipeline, adapter runner |
+| `@romujs/specs` | Machine-readable, dated, sourced network specs |
+| `@romujs/adapter-meta` | Meta (Facebook/Instagram) |
+| `@romujs/adapter-applovin` | AppLovin (MRAID v2) |
+| `@romujs/adapter-levelplay` | Unity LevelPlay / ironSource (dapi) |
 
 ## Supported networks
 

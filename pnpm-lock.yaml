@@ -38,7 +38,7 @@ importers:
 
   examples/tap-game:
     dependencies:
-      '@romu/sdk':
+      '@romujs/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
       pixi.js:
@@ -54,43 +54,43 @@ importers:
 
   packages/adapter-applovin:
     dependencies:
-      '@romu/core':
+      '@romujs/core':
         specifier: workspace:*
         version: link:../core
-      '@romu/specs':
+      '@romujs/specs':
         specifier: workspace:*
         version: link:../specs
 
   packages/adapter-levelplay:
     dependencies:
-      '@romu/core':
+      '@romujs/core':
         specifier: workspace:*
         version: link:../core
-      '@romu/specs':
+      '@romujs/specs':
         specifier: workspace:*
         version: link:../specs
 
   packages/adapter-meta:
     dependencies:
-      '@romu/core':
+      '@romujs/core':
         specifier: workspace:*
         version: link:../core
-      '@romu/specs':
+      '@romujs/specs':
         specifier: workspace:*
         version: link:../specs
 
   packages/cli:
     dependencies:
-      '@romu/adapter-applovin':
+      '@romujs/adapter-applovin':
         specifier: workspace:*
         version: link:../adapter-applovin
-      '@romu/adapter-levelplay':
+      '@romujs/adapter-levelplay':
         specifier: workspace:*
         version: link:../adapter-levelplay
-      '@romu/adapter-meta':
+      '@romujs/adapter-meta':
         specifier: workspace:*
         version: link:../adapter-meta
-      '@romu/core':
+      '@romujs/core':
         specifier: workspace:*
         version: link:../core
       commander:
@@ -99,7 +99,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@romu/specs':
+      '@romujs/specs':
         specifier: workspace:*
         version: link:../specs
       esbuild:

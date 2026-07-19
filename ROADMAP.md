@@ -33,7 +33,7 @@ adapter: Meta**.
 through the bridge. The framework's heart beats for the first time.
 
 ### Phase 2 — Spec registry + real adapters *(~2–3 weeks)*
-First three entries in `@romu/specs`; the adapter contract finalized; AppLovin and
+First three entries in `@romujs/specs`; the adapter contract finalized; AppLovin and
 Unity LevelPlay (dapi) adapters; the spec linter + `romu check`; first size report.
 **Done when:** `romu build --network all` produces three valid packages, each
 manually verified against the networks' **official test tools**. That verification
@@ -59,14 +59,14 @@ Estimates are soft — what's locked is the phase order and the done criteria.
 
 - **Phase 5 — Dev experience:** phone-framed preview, network simulator panel,
   QR on-device testing, live size HUD
-- **Phase 6 — Game layer (`@romu/pixi`):** playable flow machine, responsive
+- **Phase 6 — Game layer (`@romujs/pixi`):** playable flow machine, responsive
   system, tutorial hand / end card components, audio manager
 - **Phase 7 — Adapter expansion:** Mintegral, Vungle/Liftoff, Google,
   TikTok/Pangle, Moloco + a mature community adapter guide
 - **Phase 8 — Genre templates:** runner, pin-pull, match-3... (where the game
   design muscle shows)
 - **Beyond:** variant matrix, shareable previews, video fallback, low-end device
-  simulation, `@romu/three`
+  simulation, `@romujs/three`
 
 The ordering logic: phases 5–6 improve life for existing users (retention),
 phases 7–8 bring new users (growth) — harden the product first, then widen it.

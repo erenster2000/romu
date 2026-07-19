@@ -3,7 +3,7 @@
  * do is callable from here without a terminal (CI scripts, future cloud builds).
  */
 
-import { specs } from "@romu/specs";
+import { specs } from "@romujs/specs";
 
 export type {
   BuildOutput,

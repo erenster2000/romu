@@ -4,7 +4,7 @@
  * real image assets flowing through the asset pipeline as inlined WebP.
  */
 
-import { cta, onReady } from "@romu/sdk";
+import { cta, onReady } from "@romujs/sdk";
 import {
   Application,
   Assets,
